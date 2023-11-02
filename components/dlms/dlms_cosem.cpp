@@ -1,8 +1,8 @@
-#include "iec62056.h"
+#include "dlms_cosem.h"
 #include "esphome/core/log.h"
 #include "esphome/core/helpers.h"
 
 namespace esphome {
-  namespace dlms {
+  namespace dlms_cosem {
   }
 }
