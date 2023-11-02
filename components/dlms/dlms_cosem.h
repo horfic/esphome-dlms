@@ -4,6 +4,6 @@
 #include "esphome/components/uart/uart.h"
 
 namespace esphome {
-  namespace dlms {
+  namespace dlms_cosem {
   }
 }
