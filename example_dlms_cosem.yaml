@@ -1,4 +1,4 @@
-dlms:
+dlms_cosem:
   uart_id: uart_bus
   transport: "hdlc" # should also support 62056-21 mode e, mbus, 62056-4-7 (tcp/ip)
   guek: "" # global unicast encryption key, if empty no auth should be performed
