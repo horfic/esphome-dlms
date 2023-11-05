@@ -2,6 +2,10 @@
 #include "esphome/core/log.h"
 #include "esphome/core/helpers.h"
 
+#include <AES.h>
+#include <Crypto.h>
+#include <GCM.h>
+
 namespace esphome {
   namespace dlms {
     static const char *const TAG = "dlms";
@@ -76,7 +80,7 @@ namespace esphome {
           ESP_LOGD(TAG, "HDLC Frame : %s", format_hex_pretty(this->dll_frame_, this->dll_frame_length_).c_str());
 
           //Decrypt dlms data
-          //this->decrypt_dlms_data(&this->dll_frame_[0], this->bytes_read_);
+          this->decrypt_dlms_data(&this->dll_frame_[0]);
 
           this->reset_dll_frame();
         }
@@ -95,43 +99,44 @@ namespace esphome {
       this->dll_frame_length_ = 0;
     }
 
-//    void Dlms::decrypt_dlms_data(uint8_t *dll_frame, size_t data_size) {
-//      ESP_LOGV(TAG, "Decrypting payload");
-//
-//      uint8_t iv[12];
-//
-//      // 8 Bytes von 13 (=system-title)
-//      // Add 1 to the offset in order to skip the system title length byte
-//      memcpy(&iv[0], &dll_frame[DLMS_SYST_OFFSET + 1], systitleLength);
-//
-//      // 4 Bytes von 23 (=nonce). INFO: Nonce wird bei jedem Paket um 1 größer (=increment counter)
-//      memcpy(&iv[8], &dll_frame[headerOffset + DLMS_FRAMECOUNTER_OFFSET], DLMS_FRAMECOUNTER_LENGTH);
-//
-//      // Erstes Byte (vor dem Authentication Key) ist Byte 22 (=security byte)
-//      this->auth_key_[0] = dll_frame[LandisHDCLHeaderSize + 10];
-//
-//      uint8_t tag[12];
-//      // 12 Bytes ab Index 95
-//      memcpy(&tag[0], &dll_frame[LandisHDCLHeaderSize + 83], sizeof(tag));
-//
-//      uint8_t sml_data[this->dll_frame_length_];
-//
-//      GCM<AESSmall128> aes;
-//      aes.setKey(this->decryption_key_, sizeof(this->decryption_key_));
-//      aes.setIV(iv, sizeof(iv));
-//
-//      //ToDo - Add security byte to the beginning
-//      aes.addAuthData(this->auth_key_, sizeof(this->auth_key_));
-//
-//      // Ciphertext ist ab Index 27
-//      aes.decrypt(sml_data, &dll_frame[headerOffset + DLMS_PAYLOAD_OFFSET], this->dll_frame_length_);
-//      if (!aes.checkTag(tag, sizeof(tag))) {
-//        ESP_LOGE(TAG, "Decryption failed");
-//        return;
-//      }
-//
-//      ESP_LOGD(TAG, "RX: %s", format_hex_pretty(sml_data, sizeof(sml_data)).c_str());
-//    }
+    void Dlms::decrypt_dlms_data(uint8_t *dll_frame) {
+      ESP_LOGV(TAG, "Decrypting payload");
+
+      uint8_t iv[12];
+
+      //Get dynamic the system title length byte and read the system title bytes into iv
+      memcpy(&iv[0], &dll_frame[21], dll_frame[20]);
+
+      //INFO: Nonce wird bei jedem Paket um 1 größer (=increment counter)
+      //Get dynamic the nonce (frame counter bytes), length is probably static with 4 bytes and read into iv
+      memcpy(&iv[8], &dll_frame[33], 4);
+
+      uint8_t tag[12];
+      //Get 12 bytes gcm tag dynamic from the end of the frame
+      memcpy(&tag[0], &dll_frame[126], sizeof(tag));
+
+      GCM<AESSmall128> aes;
+      aes.setKey(this->decryption_key_, this->decryption_key_.size());
+      aes.setIV(iv, sizeof(iv));
+
+      //Only enable auth when auth key is set, possible check also with security byte is 0x30? 0x20 seams to only tell to do encryption
+      if (!this->auth_key_.empty()) {
+        //Get dynamic security byte and set it in front of the auth key (17 bytes)
+        this->auth_key_.insert(this->auth_key_.begin(), dll_frame[32]);
+        aes.addAuthData(this->auth_key_, this->auth_key_.size());
+      }
+
+      //What size to set, 88? based on 38 start byte to end of cipher 126 (141 - end flag - 2x crc checksum - 12x gcm tag)
+      uint8_t sml_data[512];
+
+      //Get dynamic start of cipher text content, byte after the frame counter (nonce), also get dynamic length of the cipher text content
+      aes.decrypt(sml_data, &dll_frame[37], 88);
+      if (!aes.checkTag(tag, sizeof(tag))) {
+        ESP_LOGE(TAG, "Decryption failed");
+      }
+
+      ESP_LOGD(TAG, "RX: %s", format_hex_pretty(sml_data, sizeof(sml_data)).c_str());
+    }
 
     bool Dlms::crc16_check(uint8_t *data, size_t data_size) {
       uint16_t crc = this->crc16_bit_by_bit(data, data_size - 2); // -2 because last 2 bytes are the checksum I have to compare it to

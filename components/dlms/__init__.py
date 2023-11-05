@@ -70,3 +70,6 @@ async def to_code(config):
 
     await cg.register_component(var, config)
     await uart.register_uart_device(var, config)
+
+    # Crypto
+    cg.add_library("rweather/Crypto", "0.4.0")

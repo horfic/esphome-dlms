@@ -26,7 +26,7 @@ namespace esphome {
           void set_data_link_layer(const std::string &data_link_layer);
         protected:
           void reset_dll_frame();
-          void decrypt_dlms_data(uint8_t *dlms_data, size_t data_size);
+          void decrypt_dlms_data(uint8_t *dlms_data);
           bool crc16_check(uint8_t *data, size_t size);
           uint16_t crc16_bit_by_bit(unsigned char *p, uint16_t len);
           uint16_t crc16_reflect(uint16_t crc, int bitnum);
