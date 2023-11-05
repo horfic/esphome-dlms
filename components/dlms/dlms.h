@@ -5,7 +5,7 @@
 
 namespace esphome {
   namespace dlms {
-      enum DataLinkLayer { DATA_LINK_LAYER_HDLC = "hdlc", DATA_LINK_LAYER_MBUS = "mbus" };
+      //enum DataLinkLayer { DATA_LINK_LAYER_HDLC = 'hdlc', DATA_LINK_LAYER_MBUS = 'mbus' };
 
       const uint8_t HDLC_FRAME_FLAG = 0x7e;
       const uint8_t HDLC_FRAME_FORMAT_TYPE_3 = 0xa0;
