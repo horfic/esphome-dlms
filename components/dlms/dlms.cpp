@@ -16,10 +16,10 @@ namespace esphome {
         const char c = this->read();
 
         // We started to read the end flag, so we got the start flag again, can skip one
-        if (this->bytes_read_ == 1 && (uint8_t) c == HDLC_FRAME_FLAG) {
-          ESP_LOGD(TAG, "found frame flag again, second time, skipping");
-          //continue;
-        }
+        //if (this->bytes_read_ == 1 && (uint8_t) c == HDLC_FRAME_FLAG) {
+        //  ESP_LOGD(TAG, "found frame flag again, second time, skipping");
+        //  continue;
+        //}
 
         // Check if frame format type 3 is used
         if (this->bytes_read_ == 1 && (uint8_t) c != HDLC_FRAME_FORMAT_TYPE_3) {
@@ -54,6 +54,7 @@ namespace esphome {
         // Continue hdlc frame building
         if (this->bytes_read_ > 0) {
           ESP_LOGV(TAG, "saving hdlc frame byte");
+
           this->dll_frame_[this->bytes_read_] = c;
           this->bytes_read_++;
         }
@@ -62,8 +63,11 @@ namespace esphome {
 
         // End of hdlc frame building
         if (this->bytes_read_ == this->dll_frame_length_ && (uint8_t) c == HDLC_FRAME_FLAG) {
-          ESP_LOGD(TAG, "byte read count: %i", this->bytes_read_);
-          ESP_LOGD(TAG, "hdlc frame full: %s", format_hex_pretty(this->dll_frame_, this->dll_frame_length_).c_str());
+          ESP_LOGD(TAG, "hdlc frame : %s", format_hex_pretty(this->dll_frame_, this->dll_frame_length_).c_str());
+
+          //Without hdlc flags
+          bool is_valid = this->crc16_check(&this->dll_frame_[1], this->bytes_read_ -2);
+          ESP_LOGD(TAG, "HDLC Frame Checksum result: %i", is_valid);
 
           //ToDo - crc16 check for header (hcs) and frame (fcs) https://github.com/alekslt/HANToMQTT/blob/master/DlmsReader.cpp#L276
           //this->decrypt_dlms_data(&this->dll_frame_[0], this->bytes_read_);
@@ -122,6 +126,87 @@ namespace esphome {
 //
 //      ESP_LOGD(TAG, "RX: %s", format_hex_pretty(sml_data, sizeof(sml_data)).c_str());
 //    }
+
+    bool Dlms::crc16_check(uint8_t *data, size_t data_size) {
+      uint16_t crc = this->crc16_bit_by_bit(data, data_size - 2); // -2 because last 2 bytes are the checksum I have to compare it to
+      uint8_t hi_byte = (crc & 0xff00) >> 8;
+      uint8_t lo_byte = (crc & 0xff);
+
+      return hi_byte == data[data_size - 1] && lo_byte == data[data_size - 2];
+    }
+
+    // http://www.zorc.breitbandkatze.de/crc.html
+    // http://www.zorc.breitbandkatze.de/crctester.c
+    uint16_t Dlms::crc16_bit_by_bit(unsigned char *p, uint16_t len) {
+      uint16_t crchighbit;
+      uint16_t i, j, c, bit, crc;
+      uint16_t crcmask;
+
+      crcmask = ((((uint16_t)1 << (HDLC_CRC16_ORDER - 1)) - 1) << 1) | 1;
+      crchighbit = (uint16_t)1 << (HDLC_CRC16_ORDER - 1);
+
+      crc = HDLC_CRC16_INIT;
+      for (i = 0; i < HDLC_CRC16_ORDER; i++) {
+        bit = crc & 1;
+        if (bit) {
+          crc ^= HDLC_CRC16_POLYNOM;
+        }
+
+        crc >>= 1;
+        if (bit) {
+          crc |= crchighbit;
+        }
+      }
+
+      // bit by bit algorithm with augmented zero bytes.
+      // does not use lookup table, suited for polynom orders between 1...32.
+
+      for (i = 0; i < len; i++) {
+        c = (uint16_t)*p++;
+        c = this->crc16_reflect(c, 8);
+
+        for (j = 0x80; j; j >>= 1) {
+          bit = crc & crchighbit;
+          crc <<= 1;
+          if (c & j) {
+              crc |= 1;
+          }
+
+          if (bit) {
+            crc ^= HDLC_CRC16_POLYNOM;
+          }
+        }
+      }
+
+      for (i = 0; i < HDLC_CRC16_ORDER; i++) {
+        bit = crc & crchighbit;
+        crc <<= 1;
+        if (bit) {
+          crc ^= HDLC_CRC16_POLYNOM;
+        }
+      }
+
+      crc = this->crc16_reflect(crc, HDLC_CRC16_ORDER);
+      crc ^= HDLC_CRC16_XOR;
+      crc &= crcmask;
+
+      return (crc);
+    }
+
+    uint16_t Dlms::crc16_reflect(uint16_t crc, int bitnum) {
+      // reflects the lower 'bitnum' bits of 'crc'
+
+      uint16_t i, j = 1, crcout = 0;
+
+      for (i = (uint16_t)1 << (bitnum - 1); i; i >>= 1) {
+        if (crc & i) {
+          crcout |= j;
+        }
+        j <<= 1;
+      }
+
+      return (crcout);
+    }
 
     void Dlms::set_decryption_key(const std::string &decryption_key) {
       if (decryption_key.length() == 0) {

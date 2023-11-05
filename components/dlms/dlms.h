@@ -10,6 +10,11 @@ namespace esphome {
       const uint8_t HDLC_FRAME_FLAG = 0x7e;
       const uint8_t HDLC_FRAME_FORMAT_TYPE_3 = 0xa0;
 
+      #define HDLC_CRC16_ORDER 16
+      #define HDLC_CRC16_POLYNOM 0x1021
+      #define HDLC_CRC16_INIT 0xffff
+      #define HDLC_CRC16_XOR 0xffff
+
       class Dlms : public Component, public uart::UARTDevice {
         public:
           void setup() override;
@@ -22,6 +27,9 @@ namespace esphome {
         protected:
           void reset_dll_frame();
           void decrypt_dlms_data(uint8_t *dlms_data, size_t data_size);
+          bool crc16_check(uint8_t *data, size_t size);
+          uint16_t crc16_bit_by_bit(unsigned char *p, uint16_t len);
+          uint16_t crc16_reflect(uint16_t crc, int bitnum);
           std::vector<uint8_t> decryption_key_{};
           std::vector<uint8_t> auth_key_{};
           std::string data_link_layer_;
