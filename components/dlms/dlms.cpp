@@ -15,7 +15,7 @@ namespace esphome {
       while (this->available()) {
         const char c = this->read();
 
-        ESP_LOGD(TAG, "byte read count: %x", this->bytes_read_);
+        ESP_LOGVV(TAG, "byte read count: %x", this->bytes_read_);
 
         // We started to read the end flag, so we got the start flag again, can skip one
         if (this->bytes_read_ == 1 && (uint8_t) c == HDLC_FRAME_FLAG) {
@@ -40,7 +40,7 @@ namespace esphome {
 
         // Set data length with start and end flag
         if (this->bytes_read_ == 2) {
-          ESP_LOGD(TAG, "Frame length found %x", (unsigned) c + 2);
+          ESP_LOGD(TAG, "Frame length found %i", (unsigned) c + 2);
           this->dll_frame_length_ = (unsigned) c + 2;
         }
 
@@ -58,16 +58,12 @@ namespace esphome {
           ESP_LOGV(TAG, "saving hdlc frame byte");
           this->dll_frame_[this->bytes_read_] = c;
           this->bytes_read_++;
-          continue;
         }
 
         // ToDo - Read source and destination address, maximum length 4 or 5? do check (currentByte & 0x01) == 0
 
         // End of hdlc frame building
         if (this->bytes_read_ > 1 && (uint8_t) c == HDLC_FRAME_FLAG) {
-          this->dll_frame_[this->bytes_read_] = c;
-          this->bytes_read_++;
-
           ESP_LOGD(TAG, "hdlc frame full: %s", format_hex_pretty(this->dll_frame_, sizeof(this->dll_frame_)).c_str());
 
           //ToDo - crc16 check for header (hcs) and frame (fcs) https://github.com/alekslt/HANToMQTT/blob/master/DlmsReader.cpp#L276
