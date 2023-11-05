@@ -64,7 +64,7 @@ namespace esphome {
 
         // End of hdlc frame building
         if (this->bytes_read_ > 1 && (uint8_t) c == HDLC_FRAME_FLAG) {
-          ESP_LOGD(TAG, "hdlc frame full: %s", format_hex_pretty(this->dll_frame_, sizeof(this->dll_frame_)).c_str());
+          ESP_LOGD(TAG, "hdlc frame full: %s", format_hex_pretty(this->dll_frame_, this->dll_frame_length_).c_str());
 
           //ToDo - crc16 check for header (hcs) and frame (fcs) https://github.com/alekslt/HANToMQTT/blob/master/DlmsReader.cpp#L276
           //this->decrypt_dlms_data(&this->dll_frame_[0], this->bytes_read_);
