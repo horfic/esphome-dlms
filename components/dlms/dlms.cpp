@@ -15,7 +15,7 @@ namespace esphome {
       while (this->available()) {
         const char c = this->read();
 
-        ESP_LOGD(TAG, "byte read count: %i", this->bytes_read_)
+        ESP_LOGD(TAG, "byte read count: %i", this->bytes_read_);
 
         // We started to read the end flag, so we got the start flag again, can skip one
         if (this->bytes_read_ == 1 && (uint8_t) c == HDLC_FRAME_FLAG) {
