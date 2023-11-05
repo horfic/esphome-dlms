@@ -50,6 +50,7 @@ namespace esphome {
 
           this->dll_frame_[this->bytes_read_] = c;
           this->bytes_read_++;
+          continue;
         }
 
         // Continue hdlc frame building
@@ -57,6 +58,7 @@ namespace esphome {
           ESP_LOGV(TAG, "saving hdlc frame byte");
           this->dll_frame_[this->bytes_read_] = c;
           this->bytes_read_++;
+          continue;
         }
 
         // ToDo - Read source and destination address, maximum length 4 or 5? do check (currentByte & 0x01) == 0
