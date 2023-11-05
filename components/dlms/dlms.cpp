@@ -63,29 +63,19 @@ namespace esphome {
 
         // End of hdlc frame building
         if (this->bytes_read_ == this->dll_frame_length_ && (uint8_t) c == HDLC_FRAME_FLAG) {
-          ESP_LOGD(TAG, "hdlc frame : %s", format_hex_pretty(this->dll_frame_, this->dll_frame_length_).c_str());
-
-          //Without hdlc flags
-          bool is_valid_header = this->crc16_check(&this->dll_frame_[1], 7);
-          ESP_LOGD(TAG, "HDLC Header Checksum result: %i", is_valid_header);
-
-          is_valid_header = this->crc16_check(&this->dll_frame_[1], 6);
-          ESP_LOGD(TAG, "HDLC Header Checksum result: %i", is_valid_header);
-
-          is_valid_header = this->crc16_check(&this->dll_frame_[1], 5);
-          ESP_LOGD(TAG, "HDLC Header Checksum result: %i", is_valid_header);
-
-          is_valid_header = this->crc16_check(&this->dll_frame_[1], 8);
-          ESP_LOGD(TAG, "HDLC Header Checksum result: %i", is_valid_header);
-
-          is_valid_header = this->crc16_check(&this->dll_frame_[1], 9);
+          //ToDo - calculate destionan and source address lengths https://github.com/alekslt/HANToMQTT/blob/master/DlmsReader.cpp#L436
+          //Without hdlc flags, header = frame type + frame length + destionation address + source address length + checksum byte
+          bool is_valid_header = this->crc16_check(&this->dll_frame_[1], 8);
           ESP_LOGD(TAG, "HDLC Header Checksum result: %i", is_valid_header);
 
           //Without hdlc flags
           bool is_valid_frame = this->crc16_check(&this->dll_frame_[1], this->bytes_read_ -2);
           ESP_LOGD(TAG, "HDLC Frame Checksum result: %i", is_valid_frame);
 
-          //ToDo - crc16 check for header (hcs) and frame (fcs) https://github.com/alekslt/HANToMQTT/blob/master/DlmsReader.cpp#L276
+          //Output frame with flags
+          ESP_LOGD(TAG, "HDLC Frame : %s", format_hex_pretty(this->dll_frame_, this->dll_frame_length_).c_str());
+
+          //Decrypt dlms data
           //this->decrypt_dlms_data(&this->dll_frame_[0], this->bytes_read_);
 
           this->reset_dll_frame();
