@@ -116,14 +116,14 @@ namespace esphome {
       memcpy(&tag[0], &dll_frame[126], sizeof(tag));
 
       GCM<AESSmall128> aes;
-      aes.setKey(this->decryption_key_, this->decryption_key_.size());
+      aes.setKey(&this->decryption_key_, this->decryption_key_.size());
       aes.setIV(iv, sizeof(iv));
 
       //Only enable auth when auth key is set, possible check also with security byte is 0x30? 0x20 seams to only tell to do encryption
       if (!this->auth_key_.empty()) {
         //Get dynamic security byte and set it in front of the auth key (17 bytes)
         this->auth_key_.insert(this->auth_key_.begin(), dll_frame[32]);
-        aes.addAuthData(this->auth_key_, this->auth_key_.size());
+        aes.addAuthData(&this->auth_key_, this->auth_key_.size());
       }
 
       //What size to set, 88? based on 38 start byte to end of cipher 126 (141 - end flag - 2x crc checksum - 12x gcm tag)
