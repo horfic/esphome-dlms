@@ -17,13 +17,13 @@ namespace esphome {
 
         // We started to read the end flag, so we got the start flag again, can skip one
         if (this->bytes_read_ == 1 && (uint8_t) c == HDLC_FRAME_FLAG) {
-          //ESP_LOGD(TAG, "found frame flag again, second time, skipping");
+          ESP_LOGD(TAG, "found frame flag again, second time, skipping");
           //continue;
         }
 
         // Check if frame format type 3 is used
         if (this->bytes_read_ == 1 && (uint8_t) c != HDLC_FRAME_FORMAT_TYPE_3) {
-          ESP_LOGV(TAG, "HDLC frame format type is not supported");
+          ESP_LOGD(TAG, "HDLC frame format type is not supported");
 
           this->reset_dll_frame();
           continue;
