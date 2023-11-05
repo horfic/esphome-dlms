@@ -19,6 +19,7 @@ namespace esphome {
 
         // We started to read the end flag, so we got the start flag again, can skip one
         if (this->bytes_read_ == 1 && (uint8_t) c == HDLC_FRAME_FLAG) {
+          ESP_LOGD(TAG, "found frame flag again, second time, skipping");
           continue;
         }
 
@@ -39,6 +40,7 @@ namespace esphome {
 
         // Set data length with start and end flag
         if (this->bytes_read_ == 2) {
+          ESP_LOGD(TAG, "Frame length found %x", (unsigned) c + 2);
           this->dll_frame_length_ = (unsigned) c + 2;
         }
 
@@ -52,6 +54,7 @@ namespace esphome {
 
         // Continue hdlc frame building
         if (this->bytes_read_ > 0) {
+          ESP_LOGV(TAG, "saving hdlc frame byte");
           this->dll_frame_[this->bytes_read_] = c;
           this->bytes_read_++;
         }
