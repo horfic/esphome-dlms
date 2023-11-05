@@ -1,5 +1,5 @@
 dlms:
   data_link_layer: "hdlc" # should also support 62056-21 mode e, mbus, 62056-4-7 (tcp/ip)
-  guek: "" # global unicast encryption key, if empty no auth should be performed
-  gak: "" # global authentication key
+  decryption_key: "" # global unicast encryption key, if empty no auth should be performed
+  auth_key: "" # global authentication key
   

@@ -1,6 +1,6 @@
 #pragma once
 
-//#ifdef USE_ARDUINO
+#ifdef USE_ARDUINO
 
 #include "dlms.h"
 #include "esphome/core/log.h"
