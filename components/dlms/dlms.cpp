@@ -15,7 +15,7 @@ namespace esphome {
       while (this->available()) {
         const char c = this->read();
 
-        ESP_LOGD(TAG, "byte read: %s", c.c_str())
+        ESP_LOGD(TAG, c)
         ESP_LOGD(TAG, "byte read count: %i", this->bytes_read_)
 
         // We started to read the end flag, so we got the start flag again, can skip one
