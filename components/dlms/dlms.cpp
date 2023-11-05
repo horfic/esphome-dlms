@@ -15,8 +15,6 @@ namespace esphome {
       while (this->available()) {
         const char c = this->read();
 
-        ESP_LOGVV(TAG, "byte read count: %x", this->bytes_read_);
-
         // We started to read the end flag, so we got the start flag again, can skip one
         if (this->bytes_read_ == 1 && (uint8_t) c == HDLC_FRAME_FLAG) {
           ESP_LOGD(TAG, "found frame flag again, second time, skipping");
@@ -64,6 +62,7 @@ namespace esphome {
 
         // End of hdlc frame building
         if (this->bytes_read_ > 1 && (uint8_t) c == HDLC_FRAME_FLAG) {
+          ESP_LOGD(TAG, "byte read count: %i", this->bytes_read_);
           ESP_LOGD(TAG, "hdlc frame full: %s", format_hex_pretty(this->dll_frame_, this->dll_frame_length_).c_str());
 
           //ToDo - crc16 check for header (hcs) and frame (fcs) https://github.com/alekslt/HANToMQTT/blob/master/DlmsReader.cpp#L276
