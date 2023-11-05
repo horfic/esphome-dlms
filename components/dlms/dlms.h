@@ -12,8 +12,6 @@ namespace esphome {
 
       class Dlms : public Component, public uart::UARTDevice {
         public:
-          Dlms(uart::UARTComponent *uart) : uart::UARTDevice(uart) {}
-
           void setup() override;
           void loop() override;
           void dump_config() override;
