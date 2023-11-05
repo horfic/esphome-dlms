@@ -67,23 +67,23 @@ namespace esphome {
 
           //Without hdlc flags
           bool is_valid_header = this->crc16_check(&this->dll_frame_[1], 7);
-          ESP_LOGD(TAG, "HDLC Header Checksum result: %i", is_valid);
+          ESP_LOGD(TAG, "HDLC Header Checksum result: %i", is_valid_header);
 
           is_valid_header = this->crc16_check(&this->dll_frame_[1], 6);
-          ESP_LOGD(TAG, "HDLC Header Checksum result: %i", is_valid);
+          ESP_LOGD(TAG, "HDLC Header Checksum result: %i", is_valid_header);
 
           is_valid_header = this->crc16_check(&this->dll_frame_[1], 5);
-          ESP_LOGD(TAG, "HDLC Header Checksum result: %i", is_valid);
+          ESP_LOGD(TAG, "HDLC Header Checksum result: %i", is_valid_header);
 
           is_valid_header = this->crc16_check(&this->dll_frame_[1], 8);
-          ESP_LOGD(TAG, "HDLC Header Checksum result: %i", is_valid);
+          ESP_LOGD(TAG, "HDLC Header Checksum result: %i", is_valid_header);
 
           is_valid_header = this->crc16_check(&this->dll_frame_[1], 9);
-          ESP_LOGD(TAG, "HDLC Header Checksum result: %i", is_valid);
+          ESP_LOGD(TAG, "HDLC Header Checksum result: %i", is_valid_header);
 
           //Without hdlc flags
           bool is_valid_frame = this->crc16_check(&this->dll_frame_[1], this->bytes_read_ -2);
-          ESP_LOGD(TAG, "HDLC Frame Checksum result: %i", is_valid);
+          ESP_LOGD(TAG, "HDLC Frame Checksum result: %i", is_valid_frame);
 
           //ToDo - crc16 check for header (hcs) and frame (fcs) https://github.com/alekslt/HANToMQTT/blob/master/DlmsReader.cpp#L276
           //this->decrypt_dlms_data(&this->dll_frame_[0], this->bytes_read_);
