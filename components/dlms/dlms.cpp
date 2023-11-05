@@ -77,7 +77,7 @@ namespace esphome {
 
     void Dlms::reset_dll_frame() {
       delete[] this->dll_frame_;
-      this->dll_frame_ = new uint8_t[2048];
+      this->dll_frame_ = new uint8_t[512];
 
       this->bytes_read_ = 0;
       this->dll_frame_length_ = 0;
