@@ -135,7 +135,7 @@ namespace esphome {
       uint8_t sml_data[512];
 
       //Get dynamic start of cipher text content, byte after the frame counter (nonce), also get dynamic length of the cipher text content
-      aes.decrypt(sml_data, &dll_frame[37], 89);
+      aes.decrypt(sml_data, &dll_frame[37], 90);
 
       uint8_t tag[12];
       //Get 12 bytes gcm tag dynamic from the end of the frame
