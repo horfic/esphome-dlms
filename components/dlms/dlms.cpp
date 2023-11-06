@@ -111,9 +111,7 @@ namespace esphome {
       //Get dynamic the nonce (frame counter bytes), length is probably static with 4 bytes and read into iv
       memcpy(&iv[8], &dll_frame[33], 4);
 
-      uint8_t tag[12];
-      //Get 12 bytes gcm tag dynamic from the end of the frame
-      memcpy(&tag[0], &dll_frame[126], sizeof(tag));
+      ESP_LOGD(TAG, "GCM IV : %s", format_hex_pretty(this->iv, this->12).c_str());
 
       GCM<AESSmall128> aes;
       aes.setIV(iv, sizeof(iv));
@@ -127,6 +125,7 @@ namespace esphome {
         this->auth_key_.insert(this->auth_key_.begin(), dll_frame[32]);
 
         uint8_t *auth_key = this->auth_key_.data();
+        ESP_LOGD(TAG, "GCM AUTH DATA : %s", format_hex_pretty(auth_key, this->auth_key_.size()).c_str());
         aes.addAuthData(auth_key, this->auth_key_.size());
       }
 
@@ -134,7 +133,11 @@ namespace esphome {
       uint8_t sml_data[512];
 
       //Get dynamic start of cipher text content, byte after the frame counter (nonce), also get dynamic length of the cipher text content
-      aes.decrypt(sml_data, &dll_frame[37], 88);
+      aes.decrypt(sml_data, &dll_frame[37], 90);
+
+      uint8_t tag[12];
+      //Get 12 bytes gcm tag dynamic from the end of the frame
+      memcpy(&tag[0], &dll_frame[126], sizeof(tag));
       if (!aes.checkTag(tag, sizeof(tag))) {
         ESP_LOGE(TAG, "Decryption failed");
       }
