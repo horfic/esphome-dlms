@@ -20,10 +20,12 @@ namespace esphome {
         const char c = this->read();
 
         // We started to read the end flag, so we got the start flag again, can skip one
-        //if (this->bytes_read_ == 1 && (uint8_t) c == HDLC_FRAME_FLAG) {
-        //  ESP_LOGD(TAG, "found frame flag again, second time, skipping");
-        //  continue;
-        //}
+        if (this->bytes_read_ == 1 && (uint8_t) c == HDLC_FRAME_FLAG && this->dll_frame_length_ == 0) {
+          ESP_LOGD(TAG, "found frame flag again, second time, skipping");
+
+          this->reset_dll_frame();
+          continue;
+        }
 
         // Check if frame format type 3 is used
         if (this->bytes_read_ == 1 && (uint8_t) c != HDLC_FRAME_FORMAT_TYPE_3) {
