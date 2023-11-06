@@ -120,6 +120,7 @@ namespace esphome {
 
       uint8_t *decryption_key = this->decryption_key_.data();
       aes.setKey(decryption_key, 16);
+        ESP_LOGD(TAG, "GCM Decryption Key : %s", format_hex_pretty(decryption_key, 16).c_str());
 
       //Only enable auth when auth key is set, possible check also with security byte is 0x30? 0x20 seams to only tell to do encryption
       if (!this->auth_key_.empty()) {
@@ -127,7 +128,7 @@ namespace esphome {
         memcpy(&auth_key[0], &dll_frame[32], 1);
         memcpy(&auth_key[1], &this->auth_key_[0], 16);
 
-        ESP_LOGD(TAG, "GCM AUTH DATA : %s", format_hex_pretty(auth_key, 17).c_str());
+        ESP_LOGD(TAG, "GCM AUTH Key : %s", format_hex_pretty(auth_key, 17).c_str());
         aes.addAuthData(auth_key, 17);
       }
 
