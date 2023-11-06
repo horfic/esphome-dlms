@@ -196,13 +196,13 @@ namespace esphome {
 //      ESP_LOGD(TAG, "SML Data export power: %i", ExportPower);
 
       TotalEnergyConsumed = sml_data[43] << 24 | sml_data[44] << 16 | sml_data[45] << 8 | sml_data[46]; // [KWh]
-      ESP_LOGI(TAG, "SML Data TotalEnergyConsumed: %fkWh", (float) &TotalEnergyConsumed / 1000.00);
+      ESP_LOGI(TAG, "SML Data TotalEnergyConsumed: %fkWh", (size_t) TotalEnergyConsumed / 1000.00);
 
       TotalEnergyConsumedTarif1 = sml_data[56] << 24 | sml_data[57] << 16 | sml_data[58] << 8 | sml_data[59]; // [KWh]
-      ESP_LOGI(TAG, "SML Data TotalEnergyConsumedTarif1: %fkWh", (float) &TotalEnergyConsumedTarif1 / 1000.00);
+      ESP_LOGI(TAG, "SML Data TotalEnergyConsumedTarif1: %fkWh", (size_t) TotalEnergyConsumedTarif1 / 1000.00);
 
       TotalEnergyConsumedTarif2 = sml_data[69] << 24 | sml_data[70] << 16 | sml_data[71] << 8 | sml_data[72]; // [KWh]
-      ESP_LOGI(TAG, "SML Data TotalEnergyConsumedTarif2: %fkWh", (float) &TotalEnergyConsumedTarif2 / 1000.00);
+      ESP_LOGI(TAG, "SML Data TotalEnergyConsumedTarif2: %fkWh", (size_t) TotalEnergyConsumedTarif2 / 1000.00);
 
 //      ExportEnergy = sml_data[54] << 24 | sml_data[55] << 16 | sml_data[56] << 8 | sml_data[57]; // [Wh]
 //      ESP_LOGD(TAG, "SML Data export energy: %i", ExportEnergy);
