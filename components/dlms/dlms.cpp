@@ -119,7 +119,7 @@ namespace esphome {
       aes.setIV(iv, sizeof(iv));
 
       uint8_t *decryption_key = this->decryption_key_.data();
-      aes.setKey(decryption_key, this->decryption_key_.size());
+      aes.setKey(decryption_key, 16);
 
       //Only enable auth when auth key is set, possible check also with security byte is 0x30? 0x20 seams to only tell to do encryption
       if (!this->auth_key_.empty()) {
