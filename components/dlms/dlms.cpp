@@ -50,7 +50,7 @@ namespace esphome {
 
         // Start hdlc frame building
         if (this->bytes_read_ == 0 && (uint8_t) c == HDLC_FRAME_FLAG) {
-          ESP_LOGV(TAG, "HDLC frame found");
+          ESP_LOGD(TAG, "HDLC frame found");
 
           this->dll_frame_[this->bytes_read_] = c;
           this->bytes_read_++;
@@ -149,8 +149,8 @@ namespace esphome {
         ESP_LOGW(TAG, "Decryption successful");
       }
 
-      ESP_LOGD(TAG, "Crypt data: %s", format_hex_pretty(&dll_frame[37], 101).c_str());
-      ESP_LOGD(TAG, "Encrypted data: %s", format_hex_pretty(sml_data, sizeof(sml_data)).c_str());
+      ESP_LOGV(TAG, "Crypt data: %s", format_hex_pretty(&dll_frame[37], 101).c_str());
+      ESP_LOGV(TAG, "Decrypted data: %s", format_hex_pretty(sml_data, sizeof(sml_data)).c_str());
 
       // Gelesene Werte
       uint16_t Year;
@@ -178,7 +178,7 @@ namespace esphome {
       Hour = sml_data[27];
       Minute = sml_data[28];
       Second = sml_data[29];
-      ESP_LOGI(TAG, "SML Data DateTime: %i-%i-%i %i:%i:%i", Year, Month, Day, Hour, Minute, Second);
+      ESP_LOGI(TAG, "SML Data DateTime: %i-%i-%iT%i:%i:%iZ", Year, Month, Day, Hour, Minute, Second);
 
 //      L1Voltage = sml_data[21] << 8 | sml_data[22]; // [V]
 //      L2Voltage = sml_data[24] << 8 | sml_data[25]; // [V]
@@ -195,14 +195,14 @@ namespace esphome {
 //      ExportPower = sml_data[44] << 24 | sml_data[45] << 16 | sml_data[46] << 8 | sml_data[47]; // [W]
 //      ESP_LOGD(TAG, "SML Data export power: %i", ExportPower);
 
-      TotalEnergyConsumed = (sml_data[44] << 16 | sml_data[45] << 8 | sml_data[46]) / 1000; // [KWh]
-      ESP_LOGI(TAG, "SML Data TotalEnergyConsumed: %d", TotalEnergyConsumed);
+      TotalEnergyConsumed = (sml_data[44] << 16 | sml_data[45] << 8 | sml_data[46]); // [KWh]
+      ESP_LOGI(TAG, "SML Data TotalEnergyConsumed: %dkWh", TotalEnergyConsumed / 1000);
 
-      TotalEnergyConsumedTarif1 = (sml_data[57] << 16 | sml_data[58] << 8 | sml_data[59]) / 1000; // [KWh]
-      ESP_LOGI(TAG, "SML Data TotalEnergyConsumedTarif1: %d", TotalEnergyConsumedTarif1);
+      TotalEnergyConsumedTarif1 = (sml_data[57] << 16 | sml_data[58] << 8 | sml_data[59]); // [KWh]
+      ESP_LOGI(TAG, "SML Data TotalEnergyConsumedTarif1: %dkWh", TotalEnergyConsumedTarif1 / 1000);
 
-      TotalEnergyConsumedTarif2 = (sml_data[70] << 16 | sml_data[71] << 8 | sml_data[72]) / 1000; // [KWh]
-      ESP_LOGI(TAG, "SML Data TotalEnergyConsumedTarif2: %d", TotalEnergyConsumedTarif2);
+      TotalEnergyConsumedTarif2 = (sml_data[70] << 16 | sml_data[71] << 8 | sml_data[72]); // [KWh]
+      ESP_LOGI(TAG, "SML Data TotalEnergyConsumedTarif2: %dkWh", TotalEnergyConsumedTarif2 / 1000);
 
 //      ExportEnergy = sml_data[54] << 24 | sml_data[55] << 16 | sml_data[56] << 8 | sml_data[57]; // [Wh]
 //      ESP_LOGD(TAG, "SML Data export energy: %i", ExportEnergy);
