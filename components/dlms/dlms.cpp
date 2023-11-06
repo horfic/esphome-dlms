@@ -20,12 +20,12 @@ namespace esphome {
         const char c = this->read();
 
         // We started to read the end flag, so we got the start flag again, can skip one
-        if (this->bytes_read_ == 1 && (uint8_t) c == HDLC_FRAME_FLAG && this->dll_frame_length_ == 0) {
+        //if (this->bytes_read_ == 1 && (uint8_t) c == HDLC_FRAME_FLAG && this->dll_frame_length_ == 0) {
           ESP_LOGD(TAG, "found frame flag again, second time, skipping");
 
-          this->reset_dll_frame();
-          continue;
-        }
+        //  this->reset_dll_frame();
+        //  continue;
+        //}
 
         // Check if frame format type 3 is used
         if (this->bytes_read_ == 1 && (uint8_t) c != HDLC_FRAME_FORMAT_TYPE_3) {
@@ -136,7 +136,7 @@ namespace esphome {
       uint8_t sml_data[512];
 
       //Get dynamic start of cipher text content, byte after the frame counter (nonce), also get dynamic length of the cipher text content
-      aes.decrypt(sml_data, &dll_frame[37], 101);
+      aes.decrypt(sml_data, &dll_frame[37], 89);
 
       uint8_t tag[12];
       //Get 12 bytes gcm tag dynamic from the end of the frame
