@@ -68,7 +68,7 @@ namespace esphome {
         // ToDo - Read source and destination address, maximum length 4 or 5? do check (currentByte & 0x01) == 0
 
         // End of hdlc frame building
-        if (this->bytes_read_ == this->dll_frame_length_ && (uint8_t) c == HDLC_FRAME_FLAG) {
+        if (this->bytes_read_ != 0 && this->bytes_read_ == this->dll_frame_length_ && (uint8_t) c == HDLC_FRAME_FLAG) {
           //ToDo - calculate destionan and source address lengths https://github.com/alekslt/HANToMQTT/blob/master/DlmsReader.cpp#L436
           //Without hdlc flags, header = frame type + frame length + destionation address + source address length + checksum byte
           bool is_valid_header = this->crc16_check(&this->dll_frame_[1], 8);
