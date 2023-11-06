@@ -129,7 +129,7 @@ namespace esphome {
           auth_key[i+1] = this->auth_key_[i];
         }
 
-        ESP_LOGD(TAG, "GCM AUTH DATA : %s", format_hex_pretty(auth_key, this->auth_key_.size()).c_str());
+        ESP_LOGD(TAG, "GCM AUTH DATA : %s", format_hex_pretty(auth_key, sizeof(auth_key)).c_str());
         aes.addAuthData(auth_key, this->auth_key_.size());
       }
 
