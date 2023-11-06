@@ -21,7 +21,7 @@ namespace esphome {
 
         // We started to read the end flag, so we got the start flag again, can skip one
         //if (this->bytes_read_ == 1 && (uint8_t) c == HDLC_FRAME_FLAG && this->dll_frame_length_ == 0) {
-          ESP_LOGD(TAG, "found frame flag again, second time, skipping");
+        //  ESP_LOGD(TAG, "found frame flag again, second time, skipping");
 
         //  this->reset_dll_frame();
         //  continue;
@@ -151,6 +151,52 @@ namespace esphome {
 
       ESP_LOGD(TAG, "Crypt data: %s", format_hex_pretty(&dll_frame[37], 101).c_str());
       ESP_LOGD(TAG, "Encrypted data: %s", format_hex_pretty(sml_data, sizeof(sml_data)).c_str());
+
+      // Gelesene Werte
+      uint16_t Year;
+      uint8_t Month;
+      uint8_t Day;
+      uint8_t Hour;
+      uint8_t Minute;
+      uint8_t Second;
+      uint16_t L1Voltage;
+      uint16_t L2Voltage;
+      uint16_t L3Voltage;
+      uint16_t L1Current;
+      uint16_t L2Current;
+      uint16_t L3Current;
+      uint32_t ImportPower;
+      uint32_t ExportPower;
+      uint32_t ImportEnergy;
+      uint32_t ExportEnergy;
+
+      Year = sml_data[6] << 8 | sml_data[7];
+      Month = sml_data[8];
+      Day = sml_data[9];
+      Hour = sml_data[11];
+      Minute = sml_data[12];
+      Second = sml_data[13];
+      ESP_LOGD(TAG, "SML Data date: %i-%i-%i %i:%i:%i", Year, Month, Day, Hour, Minute, Second);
+
+      L1Voltage = sml_data[21] << 8 | sml_data[22]; // [V]
+      L2Voltage = sml_data[24] << 8 | sml_data[25]; // [V]
+      L3Voltage = sml_data[27] << 8 | sml_data[28]; // [V]
+      ESP_LOGD(TAG, "SML Data voltage: L1 %i L2 %i L3 %i", L1Voltage, L2Voltage, L3Voltage);
+
+      L1Current = sml_data[30] << 8 | sml_data[31]; // [cA]
+      L2Current = sml_data[33] << 8 | sml_data[34]; // [cA]
+      L3Current = sml_data[36] << 8 | sml_data[37]; // [cA]
+      ESP_LOGD(TAG, "SML Data current: L1 %i L2 %i L3 %i", L1Current, L2Current, L3Current);
+
+      ImportPower = sml_data[39] << 24 | sml_data[40] << 16 | sml_data[41] << 8 | sml_data[42]; // [W]
+      ESP_LOGD(TAG, "SML Data import power: %i", ImportPower);
+      ExportPower = sml_data[44] << 24 | sml_data[45] << 16 | sml_data[46] << 8 | sml_data[47]; // [W]
+      ESP_LOGD(TAG, "SML Data export power: %i", ExportPower);
+
+      ImportEnergy = sml_data[49] << 24 | sml_data[50] << 16 | sml_data[51] << 8 | sml_data[52]; // [Wh]
+      ESP_LOGD(TAG, "SML Data import energy: %i", ImportEnergy);
+      ExportEnergy = sml_data[54] << 24 | sml_data[55] << 16 | sml_data[56] << 8 | sml_data[57]; // [Wh]
+      ESP_LOGD(TAG, "SML Data export energy: %i", ExportEnergy);
     }
 
     bool Dlms::crc16_check(uint8_t *data, size_t data_size) {
