@@ -128,7 +128,7 @@ namespace esphome {
         memcpy(&auth_key[1], &this->auth_key_[0], 16);
 
         ESP_LOGD(TAG, "GCM AUTH DATA : %s", format_hex_pretty(auth_key, 17).c_str());
-        aes.addAuthData(auth_key, this->auth_key_.size());
+        aes.addAuthData(auth_key, 17);
       }
 
       //What size to set, 88? based on 38 start byte to end of cipher 126 (141 - end flag - 2x crc checksum - 12x gcm tag)
