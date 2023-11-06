@@ -136,12 +136,12 @@ namespace esphome {
       uint8_t sml_data[512];
 
       //Get dynamic start of cipher text content, byte after the frame counter (nonce), also get dynamic length of the cipher text content
-      aes.decrypt(sml_data, &dll_frame[37], 89);
-      ESP_LOGD(TAG, "Crypt data: %s", format_hex_pretty(&dll_frame[37], 90).c_str());
+      aes.decrypt(sml_data, &dll_frame[37], 88);
+      ESP_LOGD(TAG, "Crypt data: %s", format_hex_pretty(&dll_frame[37], 88).c_str());
 
       uint8_t tag[12];
       //Get 12 bytes gcm tag dynamic from the end of the frame
-      memcpy(&tag[0], &dll_frame[126], sizeof(tag));
+      memcpy(&tag[0], &dll_frame[125], sizeof(tag));
       ESP_LOGD(TAG, "GCM TAG : %s", format_hex_pretty(tag, 12).c_str());
 
       if (!aes.checkTag(tag, sizeof(tag))) {
