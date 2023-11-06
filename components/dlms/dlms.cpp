@@ -191,7 +191,7 @@ namespace esphome {
 //      ESP_LOGD(TAG, "SML Data current: L1 %i L2 %i L3 %i", L1Current, L2Current, L3Current);
 //
       ImportPower = sml_data[82] << 24 | sml_data[83] << 16 | sml_data[84] << 8 | sml_data[85]; // [W]
-      ESP_LOGD(TAG, "SML Data import power: %iW", ImportPower);
+      ESP_LOGI(TAG, "SML Data import power: %iW", ImportPower);
 //      ExportPower = sml_data[44] << 24 | sml_data[45] << 16 | sml_data[46] << 8 | sml_data[47]; // [W]
 //      ESP_LOGD(TAG, "SML Data export power: %i", ExportPower);
 
