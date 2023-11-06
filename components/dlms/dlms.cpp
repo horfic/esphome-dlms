@@ -167,36 +167,45 @@ namespace esphome {
       uint16_t L3Current;
       uint32_t ImportPower;
       uint32_t ExportPower;
-      uint32_t ImportEnergy;
-      uint32_t ExportEnergy;
+      uint32_t TotalEnergyConsumed;
+      uint32_t TotalEnergyConsumedTarif1;
+      uint32_t TotalEnergyConsumedTarif2;
+      uint32_t TotalEnergyExported;
 
-      Year = sml_data[6] << 8 | sml_data[7];
-      Month = sml_data[8];
-      Day = sml_data[9];
-      Hour = sml_data[11];
-      Minute = sml_data[12];
-      Second = sml_data[13];
+      Year = sml_data[22] << 8 | sml_data[23];
+      Month = sml_data[24];
+      Day = sml_data[25];
+      Hour = sml_data[27];
+      Minute = sml_data[28];
+      Second = sml_data[29];
       ESP_LOGD(TAG, "SML Data date: %i-%i-%i %i:%i:%i", Year, Month, Day, Hour, Minute, Second);
 
-      L1Voltage = sml_data[21] << 8 | sml_data[22]; // [V]
-      L2Voltage = sml_data[24] << 8 | sml_data[25]; // [V]
-      L3Voltage = sml_data[27] << 8 | sml_data[28]; // [V]
-      ESP_LOGD(TAG, "SML Data voltage: L1 %i L2 %i L3 %i", L1Voltage, L2Voltage, L3Voltage);
+//      L1Voltage = sml_data[21] << 8 | sml_data[22]; // [V]
+//      L2Voltage = sml_data[24] << 8 | sml_data[25]; // [V]
+//      L3Voltage = sml_data[27] << 8 | sml_data[28]; // [V]
+//      ESP_LOGD(TAG, "SML Data voltage: L1 %i L2 %i L3 %i", L1Voltage, L2Voltage, L3Voltage);
+//
+//      L1Current = sml_data[30] << 8 | sml_data[31]; // [cA]
+//      L2Current = sml_data[33] << 8 | sml_data[34]; // [cA]
+//      L3Current = sml_data[36] << 8 | sml_data[37]; // [cA]
+//      ESP_LOGD(TAG, "SML Data current: L1 %i L2 %i L3 %i", L1Current, L2Current, L3Current);
+//
+//      ImportPower = sml_data[39] << 24 | sml_data[40] << 16 | sml_data[41] << 8 | sml_data[42]; // [W]
+//      ESP_LOGD(TAG, "SML Data import power: %i", ImportPower);
+//      ExportPower = sml_data[44] << 24 | sml_data[45] << 16 | sml_data[46] << 8 | sml_data[47]; // [W]
+//      ESP_LOGD(TAG, "SML Data export power: %i", ExportPower);
 
-      L1Current = sml_data[30] << 8 | sml_data[31]; // [cA]
-      L2Current = sml_data[33] << 8 | sml_data[34]; // [cA]
-      L3Current = sml_data[36] << 8 | sml_data[37]; // [cA]
-      ESP_LOGD(TAG, "SML Data current: L1 %i L2 %i L3 %i", L1Current, L2Current, L3Current);
+      TotalEnergyConsumed = (sml_data[44] << 16 | sml_data[45] << 8 | sml_data[46]) / 1000; // [KWh]
+      ESP_LOGD(TAG, "SML Data TotalEnergyConsumed: %i", TotalEnergyConsumed);
 
-      ImportPower = sml_data[39] << 24 | sml_data[40] << 16 | sml_data[41] << 8 | sml_data[42]; // [W]
-      ESP_LOGD(TAG, "SML Data import power: %i", ImportPower);
-      ExportPower = sml_data[44] << 24 | sml_data[45] << 16 | sml_data[46] << 8 | sml_data[47]; // [W]
-      ESP_LOGD(TAG, "SML Data export power: %i", ExportPower);
+      TotalEnergyConsumedTarif1 = (sml_data[57] << 16 | sml_data[58] << 8 | sml_data[59]) / 1000; // [KWh]
+      ESP_LOGD(TAG, "SML Data TotalEnergyConsumedTarif1: %i", TotalEnergyConsumedTarif1);
 
-      ImportEnergy = sml_data[49] << 24 | sml_data[50] << 16 | sml_data[51] << 8 | sml_data[52]; // [Wh]
-      ESP_LOGD(TAG, "SML Data import energy: %i", ImportEnergy);
-      ExportEnergy = sml_data[54] << 24 | sml_data[55] << 16 | sml_data[56] << 8 | sml_data[57]; // [Wh]
-      ESP_LOGD(TAG, "SML Data export energy: %i", ExportEnergy);
+      TotalEnergyConsumedTarif2 = (sml_data[70] << 16 | sml_data[71] << 8 | sml_data[72]) / 1000; // [KWh]
+      ESP_LOGD(TAG, "SML Data TotalEnergyConsumedTarif2: %i", TotalEnergyConsumedTarif2);
+
+//      ExportEnergy = sml_data[54] << 24 | sml_data[55] << 16 | sml_data[56] << 8 | sml_data[57]; // [Wh]
+//      ESP_LOGD(TAG, "SML Data export energy: %i", ExportEnergy);
     }
 
     bool Dlms::crc16_check(uint8_t *data, size_t data_size) {
