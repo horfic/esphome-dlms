@@ -124,14 +124,10 @@ namespace esphome {
       //Only enable auth when auth key is set, possible check also with security byte is 0x30? 0x20 seams to only tell to do encryption
       if (!this->auth_key_.empty()) {
         uint8_t *auth_key = new uint8_t[17];
-        for (int i = 0; i < 16; i++) {
-          if (i == 0) {
-              auth_key[i] = dll_frame[32];
-          }
-          auth_key[i+1] = this->auth_key_[i];
-        }
+        memcpy(&auth_key[0], &dll_frame[32], 1);
+        memcpy(&auth_key[1], &this->auth_key_[0], 16);
 
-        ESP_LOGD(TAG, "GCM AUTH DATA : %s", format_hex_pretty(auth_key, sizeof(auth_key)).c_str());
+        ESP_LOGD(TAG, "GCM AUTH DATA : %s", format_hex_pretty(auth_key, 17).c_str());
         aes.addAuthData(auth_key, this->auth_key_.size());
       }
 
