@@ -111,7 +111,7 @@ namespace esphome {
       //Get dynamic the nonce (frame counter bytes), length is probably static with 4 bytes and read into iv
       memcpy(&iv[8], &dll_frame[33], 4);
 
-      ESP_LOGD(TAG, "GCM IV : %s", format_hex_pretty(this->iv, this->12).c_str());
+      ESP_LOGD(TAG, "GCM IV : %s", format_hex_pretty(iv, 12).c_str());
 
       GCM<AESSmall128> aes;
       aes.setIV(iv, sizeof(iv));
@@ -138,6 +138,8 @@ namespace esphome {
       uint8_t tag[12];
       //Get 12 bytes gcm tag dynamic from the end of the frame
       memcpy(&tag[0], &dll_frame[126], sizeof(tag));
+      ESP_LOGD(TAG, "GCM TAG : %s", format_hex_pretty(tag, 12).c_str());
+
       if (!aes.checkTag(tag, sizeof(tag))) {
         ESP_LOGE(TAG, "Decryption failed");
       }
