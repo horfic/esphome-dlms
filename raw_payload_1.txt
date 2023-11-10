@@ -7,16 +7,16 @@ FF.................destination address field
 13.................source address field
 EE.................crc16 header checksum
 E1.................crc16 header checksum
-E6.................llc header (format identifier)
-E7.................llc header (group identifier)
-00.................llc header (group length)
-E0.................service type
-40.................long invoke-id and priority
-00.................
-01.................
-00.................
-00.................
-77.................
+E6.................llc destination (local) LSAP (0xE6)
+E7.................llc source (local) LSAP (0xE6 or 0xE7)
+00.................llc quality (always 0x00)
+E0.................service type (llc information parameter)
+40.................long invoke-id and priority (llc information parameter)
+00.................llc information parameter
+01.................llc information parameter
+00.................llc information parameter
+00.................llc information parameter
+77.................llc information parameter
 DB.................startbyte for aes128-gcm
 08.................system title length, 8 bytes length based on the value
 4C.................L (string), system title
