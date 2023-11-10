@@ -141,7 +141,7 @@ namespace esphome {
       uint8_t tag[16];
       //Get 12 bytes gcm tag dynamic from the end of the frame
       memcpy(&tag[0], &dll_frame[122], sizeof(tag));
-      ESP_LOGD(TAG, "GCM TAG : %s", format_hex_pretty(tag, 12).c_str());
+      ESP_LOGD(TAG, "GCM TAG : %s", format_hex_pretty(tag, sizeof(tag)).c_str());
 
       if (!aes.checkTag(tag, sizeof(tag))) {
         ESP_LOGE(TAG, "Decryption failed");
