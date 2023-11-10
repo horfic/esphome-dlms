@@ -102,7 +102,7 @@ namespace esphome {
     }
 
     void Dlms::reset_dll_frame() {
-      memset(&this->dll_frame_, 0, 512);
+      memset(&this->dll_frame_, 0x00, sizeof(this->dll_frame_));
 
       this->bytes_read_ = 0;
       this->dll_frame_length_ = 0;
