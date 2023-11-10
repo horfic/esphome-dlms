@@ -9,6 +9,8 @@ namespace esphome {
 
       const uint8_t HDLC_FRAME_FLAG = 0x7e;
       const uint8_t HDLC_FRAME_FORMAT_TYPE_3 = 0xa0;
+      const uint8_t GCM_START_FLAG_1 = 0xdb;
+      const uint8_t GCM_START_FLAG_2 = 0x08;
 
       #define HDLC_CRC16_ORDER 16
       #define HDLC_CRC16_POLYNOM 0x1021

@@ -35,6 +35,14 @@ namespace esphome {
           continue;
         }
 
+        // Check if frame format type 3 is used
+        if ((this->bytes_read_ == 19 && (uint8_t) c != GCM_START_FLAG_1) || (this->bytes_read_ == 20 && (uint8_t) c != GCM_START_FLAG_2)) {
+          ESP_LOGD(TAG, "GCM Flags not found");
+
+          this->reset_dll_frame();
+          continue;
+        }
+
         if ( this->bytes_read_ > 2 && this->bytes_read_ > this->dll_frame_length_) {
           ESP_LOGW(TAG, "Received more bytes as frame length, resetting");
 
