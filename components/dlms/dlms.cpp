@@ -14,7 +14,7 @@ namespace esphome {
       this->reset_dll_frame();
     }
 
-    // ToDo - implement configurable timeout (11 sec) and buffer size (2048)
+    // ToDo - implement max hdlc frame size of 250 and max pdu size of 1200, configurable timeout (11 sec) and buffer size (2048)
     void Dlms::loop() {
       while (this->available()) {
         const char c = this->read();
@@ -35,7 +35,7 @@ namespace esphome {
           continue;
         }
 
-        // Check if frame format type 3 is used
+        // Check if gcm flags are found
         if ((this->bytes_read_ == 19 && (uint8_t) c != GCM_START_FLAG_1) || (this->bytes_read_ == 20 && (uint8_t) c != GCM_START_FLAG_2)) {
           ESP_LOGD(TAG, "GCM Flags not found");
 
@@ -145,10 +145,10 @@ namespace esphome {
       //Get dynamic start of cipher text content, byte after the frame counter (nonce), also get dynamic length of the cipher text content
       aes.decrypt(sml_data, &dll_frame[37], 89);
 
-      uint8_t tag[12];
-      //Get 12 bytes gcm tag dynamic from the end of the frame
+      uint8_t tag[16];
+      //Get 12 or 16?? bytes gcm tag dynamic from the end of the frame
       memcpy(&tag[0], &dll_frame[126], sizeof(tag));
-      ESP_LOGD(TAG, "GCM TAG : %s", format_hex_pretty(tag, 12).c_str());
+      ESP_LOGD(TAG, "GCM TAG : %s", format_hex_pretty(tag, 16).c_str());
 
       if (!aes.checkTag(tag, sizeof(tag))) {
         ESP_LOGE(TAG, "Decryption failed");

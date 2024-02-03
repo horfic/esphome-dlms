@@ -10,10 +10,10 @@ E1.................crc16 header checksum
 E6.................llc destination (local) LSAP (0xE6)
 E7.................llc source (local) LSAP (0xE6 or 0xE7)
 00.................llc quality (always 0x00)
-E0.................service type (llc information parameter)
-40.................long invoke-id and priority (llc information parameter)
+E0.................service type (llc information parameter n*bits)
+40.................long invoke-id and priority (llc information parameter) (more frames expected?) (C0 last frame?)
 00.................llc information parameter
-01.................llc information parameter
+01.................llc information parameter, frame 1?
 00.................llc information parameter
 00.................llc information parameter
 77.................llc information parameter
@@ -28,114 +28,114 @@ DB.................startbyte for aes128-gcm
 D3.................Ó (string) 211 (dec), system title, possible some bit shifting to get the serial number 1030756480681
 A9.................© (string) 169 (dec), system title, possible some bit shifting to get the serial number 1030756480681
 82.................undocumented
-01.................length of subsequent bytes e.g. 0x0103 = 259
-03.................length of subsequent bytes e.g. 0x0103 = 259
-30.................security control byte
-00.................frame counter 4 byte length, incremented with every new frame 0x000A240D
-0A.................frame counter 4 byte length, incremented with every new frame 0x000A240D
-24.................frame counter 4 byte length, incremented with every new frame 0x000A240D
-0D.................frame counter 4 byte length, incremented with every new frame 0x000A240D
-50.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-4B.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-28.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-ED.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-B5.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-3A.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-DA.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-BE.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-CD.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-7F.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-33.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-A8.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-B4.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-F0.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-92.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-D8.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-7D.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-9B.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-0F.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-5D.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-98.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-E8.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-F5.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-C5.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-54.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-29.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-28.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-0E.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-EE.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-59.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-1C.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-08.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-13.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-3C.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-19.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-E3.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-F5.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-EC.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-92.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-A8.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-1F.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-97.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-2E.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-45.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-13.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-C7.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-D7.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-C8.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-CF.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-4E.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-7F.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-8B.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-F1.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-B8.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-5F.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-53.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-8A.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-B3.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-BE.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-A4.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-B5.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-D2.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-B3.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-F1.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-A4.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-8A.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-50.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-48.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-56.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-4D.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-46.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-EE.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-3F.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-D8.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-A3.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-2C.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-E5.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-EE.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-1C.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-6E.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-05.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-D2.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-FE.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-76.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-4E.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-13.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-FB.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-2D.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-0B.................cypher text based on length of subsequent bytes - 13 bytes based on startbyte for aes128-gcm until security control byte
-37.................tag byte
-BD.................tag byte
-B3.................tag byte
-BE.................tag byte
-1A.................tag byte
-E0.................tag byte
-CD.................tag byte
-A9.................tag byte
-B9.................tag byte
-8F.................tag byte
-91.................tag byte
-3B.................tag byte
+01.................length of apdu bytes e.g. 0x0103 = 259, frame 1 out of 3?
+03.................length of apdu bytes e.g. 0x0103 = 259, frame 1 out of 3?
+30.................security header, security control byte (0x70 compr+auth+enc, 0x60 compr+enc, 0x50 compr+auth, 0x40 compression only, 0x30 auth+enc, 0x20 enc, 0x10 auth, 0x00 nothing (invocation counter is not present))
+00.................security header, invocation counter, frame counter 4 byte length, incremented with every new frame 0x000A240D
+0A.................security header, invocation counter, frame counter 4 byte length, incremented with every new frame 0x000A240D
+24.................security header, invocation counter, frame counter 4 byte length, incremented with every new frame 0x000A240D
+0D.................security header, invocation counter, frame counter 4 byte length, incremented with every new frame 0x000A240D
+50.................encrypted data
+4B.................encrypted data
+28.................encrypted data
+ED.................encrypted data
+B5.................encrypted data
+3A.................encrypted data
+DA.................encrypted data
+BE.................encrypted data
+CD.................encrypted data
+7F.................encrypted data
+33.................encrypted data
+A8.................encrypted data
+B4.................encrypted data
+F0.................encrypted data
+92.................encrypted data
+D8.................encrypted data
+7D.................encrypted data
+9B.................encrypted data
+0F.................encrypted data
+5D.................encrypted data
+98.................encrypted data
+E8.................encrypted data
+F5.................encrypted data
+C5.................encrypted data
+54.................encrypted data
+29.................encrypted data
+28.................encrypted data
+0E.................encrypted data
+EE.................encrypted data
+59.................encrypted data
+1C.................encrypted data
+08.................encrypted data
+13.................encrypted data
+3C.................encrypted data
+19.................encrypted data
+E3.................encrypted data
+F5.................encrypted data
+EC.................encrypted data
+92.................encrypted data
+A8.................encrypted data
+1F.................encrypted data
+97.................encrypted data
+2E.................encrypted data
+45.................encrypted data
+13.................encrypted data
+C7.................encrypted data
+D7.................encrypted data
+C8.................encrypted data
+CF.................encrypted data
+4E.................encrypted data
+7F.................encrypted data
+8B.................encrypted data
+F1.................encrypted data
+B8.................encrypted data
+5F.................encrypted data
+53.................encrypted data
+8A.................encrypted data
+B3.................encrypted data
+BE.................encrypted data
+A4.................encrypted data
+B5.................encrypted data
+D2.................encrypted data
+B3.................encrypted data
+F1.................encrypted data
+A4.................encrypted data
+8A.................encrypted data
+50.................encrypted data
+48.................encrypted data
+56.................encrypted data
+4D.................encrypted data
+46.................encrypted data
+EE.................encrypted data
+3F.................encrypted data
+D8.................encrypted data
+A3.................encrypted data
+2C.................encrypted data
+E5.................encrypted data
+EE.................encrypted data
+1C.................encrypted data
+6E.................encrypted data
+05.................encrypted data
+D2.................encrypted data
+FE.................encrypted data
+76.................encrypted data
+4E.................encrypted data
+13.................encrypted data
+FB.................encrypted data
+2D.................encrypted data
+0B.................encrypted data
+37.................encrypted data
+BD.................encrypted data
+B3.................encrypted data
+BE.................encrypted data
+1A.................encrypted data
+E0.................encrypted data
+CD.................encrypted data
+A9.................encrypted data
+B9.................encrypted data
+8F.................encrypted data
+91.................encrypted data
+3B.................encrypted data
 93.................crc16 frame checksum
 F4.................crc16 frame checksum
 7E.................frame flag
