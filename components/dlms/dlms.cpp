@@ -114,9 +114,9 @@ namespace esphome {
           if (this->frames_read_ == 1) {
             this->reset_apdu();
 
-            memcpy(&this->apdu_buffer_[0], this->frame_buffer_[this->apdu_offset_], this->frame_length_ - this->apdu_offset_ - 3);
+            memcpy(&this->apdu_buffer_[0], &this->frame_buffer_[this->apdu_offset_], this->frame_length_ - this->apdu_offset_ - 3);
           } else {
-            memcpy(&this->apdu_buffer_[sizeof(this->apdu_buffer_) + 1], this->frame_buffer_[this->apdu_offset_], this->frame_length_ - this->apdu_offset_ - 3);
+            memcpy(&this->apdu_buffer_[sizeof(this->apdu_buffer_) + 1], &this->frame_buffer_[this->apdu_offset_], this->frame_length_ - this->apdu_offset_ - 3);
           }
 
           if (this->apdu_length_ >= sizeof(this->apdu_buffer_)) {
