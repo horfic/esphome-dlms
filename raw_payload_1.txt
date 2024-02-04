@@ -11,7 +11,7 @@ E6.................llc destination (local) LSAP (0xE6)
 E7.................llc source (local) LSAP (0xE6 or 0xE7)
 00.................llc quality (always 0x00)
 E0.................service type (llc information parameter n*bits)
-40.................long invoke-id and priority (llc information parameter) (more frames expected?) (C0 last frame?)
+40.................long invoke-id and priority (llc information parameter)  (more frames expected with 40?), last frame with C0?
 00.................llc information parameter
 01.................llc information parameter, frame 1?
 00.................llc information parameter
@@ -28,8 +28,8 @@ DB.................startbyte for aes128-gcm
 D3.................Ó (string) 211 (dec), system title, possible some bit shifting to get the serial number 1030756480681
 A9.................© (string) 169 (dec), system title, possible some bit shifting to get the serial number 1030756480681
 82.................undocumented
-01.................length of apdu bytes e.g. 0x0103 = 259, frame 1 out of 3?
-03.................length of apdu bytes e.g. 0x0103 = 259, frame 1 out of 3?
+01.................length of security header (control byte and invocation counter) + apdu bytes e.g. 0x0103 = 259
+03.................length of security header (control byte and invocation counter) + apdu bytes e.g. 0x0103 = 259
 30.................security header, security control byte (0x70 compr+auth+enc, 0x60 compr+enc, 0x50 compr+auth, 0x40 compression only, 0x30 auth+enc, 0x20 enc, 0x10 auth, 0x00 nothing (invocation counter is not present))
 00.................security header, invocation counter, frame counter 4 byte length, incremented with every new frame 0x000A240D
 0A.................security header, invocation counter, frame counter 4 byte length, incremented with every new frame 0x000A240D

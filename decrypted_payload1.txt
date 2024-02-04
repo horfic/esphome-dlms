@@ -24,7 +24,7 @@ FF...........................................hundredths of seconds
 0B...........................................11 (min)
 0A...........................................10 (sec)
 FF...........................................hundredths of seconds
-80.00........................................deviation in minutess of local time to GMT (0x8000 = not specified)
+80.00........................................deviation in minutes of local time to GMT (0x8000 = not specified)
 00...........................................clock status (bit 0 (LSB): invalid value, bit 1: doubtful value, bit 2: different clock base, bit 3: invalid clock status, bit 4: reserved, bit 5: reserved, bit 6: reserved, bit 7 (MSB): daylight saving active)
 09...........................................data type (octet string)
 06...........................................length (6)

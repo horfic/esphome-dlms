@@ -7,8 +7,8 @@ FF.................destination address field
 13.................source address field
 86.................crc16 header checksum
 F8.................crc16 header checksum
-E0.................possible still llc information?
-C0.................possible still llc information?
+E0.................service type (llc information parameter n*bits)
+C0.................long invoke-id and priority (llc information parameter)  (more frames expected with 40?), last frame with C0?
 00.................possible still llc information?
 03.................possible still llc information? possible counter of additional package?
 00.................possible still llc information?
@@ -33,18 +33,18 @@ DC.................encrypted data
 09.................encrypted data
 7D.................encrypted data
 BE.................encrypted data
-5D.................encrypted data
-A1.................encrypted data
-22.................encrypted data
-2D.................encrypted data
-A9.................encrypted data
-CB.................encrypted data
-7C.................encrypted data
-B8.................encrypted data
-0B.................encrypted data
-BF.................encrypted data
-58.................encrypted data
-DA.................encrypted data
+5D.................gcm tag
+A1.................gcm tag
+22.................gcm tag
+2D.................gcm tag
+A9.................gcm tag
+CB.................gcm tag
+7C.................gcm tag
+B8.................gcm tag
+0B.................gcm tag
+BF.................gcm tag
+58.................gcm tag
+DA.................gcm tag
 B9.................crc16 frame checksum
 F6.................crc16 frame checksum
 7E.................frame flag

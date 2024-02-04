@@ -11,88 +11,123 @@ namespace esphome {
     static const char *const TAG = "dlms";
 
     void Dlms::setup() {
-      this->reset_dll_frame();
+      this->frames_read_ = 0;
+      this->reset_apdu();
+      this->reset_frame();
     }
 
-    // ToDo - implement max hdlc frame size of 250 and max pdu size of 1200, configurable timeout (11 sec) and buffer size (2048)
+    // ToDo - implement max hdlc frame size of 250?? and max pdu size of 1200??, configurable timeout (11 sec) and buffer size (2048)
     void Dlms::loop() {
       while (this->available()) {
         const char c = this->read();
 
-        // We started to read the end flag, so we got the start flag again, can skip one
-        //if (this->bytes_read_ == 1 && (uint8_t) c == HDLC_FRAME_FLAG && this->dll_frame_length_ == 0) {
-        //  ESP_LOGD(TAG, "found frame flag again, second time, skipping");
-
-        //  this->reset_dll_frame();
-        //  continue;
-        //}
-
         // Check if frame format type 3 is used
-        if (this->bytes_read_ == 1 && (uint8_t) c != HDLC_FRAME_FORMAT_TYPE_3) {
-          ESP_LOGD(TAG, "HDLC frame format type is not supported");
+        if (this->frame_bytes_read_ == 1 && (uint8_t) c != HDLC_FRAME_FORMAT_TYPE_3) {
+          ESP_LOGD(TAG, "HDLC frame format type is not supported, resetting...");
 
-          this->reset_dll_frame();
+          this->reset_frame();
           continue;
         }
 
-        // Check if gcm flags are found
-        if ((this->bytes_read_ == 19 && (uint8_t) c != GCM_START_FLAG_1) || (this->bytes_read_ == 20 && (uint8_t) c != GCM_START_FLAG_2)) {
-          ESP_LOGD(TAG, "GCM Flags not found");
+        // Check if gcm flag is found for frame 1
+        if (this->frames_read_ == 1 && this->frame_bytes_read_ == 19) {
+          if ((uint8_t) c != GCM_START_FLAG) {
+            ESP_LOGD(TAG, "GCM Flag not found in first frame, resetting...");
 
-          this->reset_dll_frame();
+            this->reset_frame();
+            continue;
+          } else {
+            this->apdu_offset_ = 20;
+          }
+        }
+
+        if (this->frame_bytes_read_ == 10 && (uint8_t) c == GCM_START_FLAG)
+
+        // Check if frame length is not exceeded
+        if ( this->frame_bytes_read_ > 2 && this->frame_bytes_read_ > this->frame_length_) {
+          ESP_LOGW(TAG, "Received more bytes as frame length, resetting...");
+
+          this->reset_frame();
           continue;
         }
 
-        if ( this->bytes_read_ > 2 && this->bytes_read_ > this->dll_frame_length_) {
-          ESP_LOGW(TAG, "Received more bytes as frame length, resetting");
+        // Validating HDLC header
+        if (this->frame_bytes_read_ == 9) {
+          bool is_valid_header = this->crc16_check(&this->frame_buffer_[1], 8);
 
-          this->reset_dll_frame();
-          continue;
+          if (!is_valid_header) {
+            ESP_LOGW(TAG, "HDLC header validation failed, resetting...");
+
+            this->reset_frame();
+            continue;
+          }
         }
 
-        // Set data length with start and end flag
-        if (this->bytes_read_ == 2) {
-          ESP_LOGD(TAG, "Frame length found %i", (unsigned) c + 2);
-          this->dll_frame_length_ = (unsigned) c + 2;
-        }
-
-        // Start hdlc frame building
-        if (this->bytes_read_ == 0 && (uint8_t) c == HDLC_FRAME_FLAG) {
+        // Start HDLC frame reading
+        if (this->frame_bytes_read_ == 0 && (uint8_t) c == HDLC_FRAME_FLAG) {
           ESP_LOGD(TAG, "HDLC frame found");
 
-          this->dll_frame_[this->bytes_read_] = c;
-          this->bytes_read_++;
+          this->frame_buffer_[this->frame_bytes_read_] = c;
+          this->frame_bytes_read_++;
+          this->frames_read_++;
           continue;
+        }
+
+        // Set frame length with start and end flag
+        if (this->frame_bytes_read_ == 2) {
+          this->frame_length_ = (unsigned) c + 2;
+
+          ESP_LOGD(TAG, "Frame length found %i", this->frame_length_);
+        }
+
+        // Set apdu length
+        if (this->frames_read_ == 1 && this->frame_bytes_read_ == 31) {
+          this->apdu_length_ = (this->frame_buffer_[30] << 8) | this->frame_buffer_[31];
+          this->apdu_length_ += 12
+
+          ESP_LOGD(TAG, "APDU length found %i", this->apdu_length_);
         }
 
         // Continue hdlc frame building
-        if (this->bytes_read_ > 0) {
-          ESP_LOGV(TAG, "saving hdlc frame byte");
+        if (this->frame_bytes_read_ > 0) {
+          ESP_LOGV(TAG, "Saving HDLC frame byte");
 
-          this->dll_frame_[this->bytes_read_] = c;
-          this->bytes_read_++;
+          this->frame_buffer_[this->frame_bytes_read_] = c;
+          this->frame_bytes_read_++;
         }
 
         // ToDo - Read source and destination address, maximum length 4 or 5? do check (currentByte & 0x01) == 0
 
-        // End of hdlc frame building
-        if (this->bytes_read_ != 0 && this->bytes_read_ == this->dll_frame_length_ && (uint8_t) c == HDLC_FRAME_FLAG) {
-          //ToDo - calculate destionan and source address lengths https://github.com/alekslt/HANToMQTT/blob/master/DlmsReader.cpp#L436
-          //Without hdlc flags, header = frame type + frame length + destionation address + source address length + checksum byte
-          bool is_valid_header = this->crc16_check(&this->dll_frame_[1], 8);
-          ESP_LOGD(TAG, "HDLC Header Checksum result: %i", is_valid_header);
+        // Reading last byte of frame
+        if (this->frame_bytes_read_ != 0 && this->frame_bytes_read_ == this->frame_length_ && (uint8_t) c == HDLC_FRAME_FLAG) {
+          // ToDo - calculate destination and source address lengths https://github.com/alekslt/HANToMQTT/blob/master/DlmsReader.cpp#L436
 
-          //Without hdlc flags
-          bool is_valid_frame = this->crc16_check(&this->dll_frame_[1], this->bytes_read_ -2);
-          ESP_LOGD(TAG, "HDLC Frame Checksum result: %i", is_valid_frame);
+          // Validating hdlc frame
+          bool is_valid_frame = this->crc16_check(&this->frame_buffer_[1], this->frame_bytes_read_ -2);
+          if (!is_valid_frame) {
+            ESP_LOGW(TAG, "HDLC frame validation failed, resetting...");
 
-          //Output frame with flags
-          ESP_LOGD(TAG, "HDLC Frame : %s", format_hex_pretty(this->dll_frame_, this->dll_frame_length_).c_str());
+            this->reset_frame();
+            continue;
+          }
 
-          //Decrypt dlms data
-          this->decrypt_dlms_data(&this->dll_frame_[0]);
+          if (this->frames_read_ == 1) {
+            this->reset_apdu();
 
-          this->reset_dll_frame();
+            memcpy(&this->apdu_buffer_[0], this->frame_buffer_[this->apdu_offset_], this->frame_length_ - this->apdu_offset_ - 3);
+          } else {
+            memcpy(&this->apdu_buffer_[sizeof(this->apdu_buffer_) + 1], this->frame_buffer_[this->apdu_offset_], this->frame_length_ - this->apdu_offset_ - 3);
+          }
+
+          if (this->apdu_length_ >= sizeof(this->apdu_buffer_)) {
+            ESP_LOGD(TAG, "APDU complete : %s", format_hex_pretty(this->apdu_buffer_, this->apdu_length_).c_str());
+            // Decrypt apdu
+            this->decrypt_dlms_data(&this->apdu_buffer_[0]);
+
+            this->frames_read_ = 0;
+          }
+
+          this->reset_frame();
         }
       }
     }
@@ -101,29 +136,36 @@ namespace esphome {
       ESP_LOGCONFIG(TAG, "DLMS:");
     }
 
-    void Dlms::reset_dll_frame() {
-      memset(&this->dll_frame_, 0x00, sizeof(this->dll_frame_));
+    void Dlms::reset_apdu() {
+      this->apdu_length_ = 0;
 
-      this->bytes_read_ = 0;
-      this->dll_frame_length_ = 0;
+      memset(&this->apdu_buffer_, 0x00, sizeof(this->apdu_buffer_));
     }
 
-    void Dlms::decrypt_dlms_data(uint8_t *dll_frame) {
+    void Dlms::reset_frame() {
+      memset(&this->frame_buffer_, 0x00, sizeof(this->frame_buffer_));
+
+      this->frame_bytes_read_ = 0;
+      this->frame_length_ = 0;
+      this->apdu_offset_ = 16;
+    }
+
+    void Dlms::decrypt_dlms_data(uint8_t *apdu) {
       ESP_LOGV(TAG, "Decrypting payload");
 
       uint8_t iv[12];
 
       //Get dynamic the system title length byte and read the system title bytes into iv
-      memcpy(&iv[0], &dll_frame[21], dll_frame[20]);
+      memcpy(&iv[0], &apdu[1], apdu[0]);
 
       //INFO: Nonce wird bei jedem Paket um 1 größer (=increment counter)
       //Get dynamic the nonce (frame counter bytes), length is probably static with 4 bytes and read into iv
-      memcpy(&iv[8], &dll_frame[33], 4);
+      memcpy(&iv[8], &apdu[13], 4);
 
       ESP_LOGD(TAG, "GCM IV : %s", format_hex_pretty(iv, 12).c_str());
 
       GCM<AESSmall128> aes;
-      aes.setIV(iv, sizeof(iv));
+      aes.setIV(iv, 12);
 
       uint8_t *decryption_key = this->decryption_key_.data();
       aes.setKey(decryption_key, 16);
@@ -132,7 +174,7 @@ namespace esphome {
       //Only enable auth when auth key is set, possible check also with security byte is 0x30? 0x20 seams to only tell to do encryption
       if (!this->auth_key_.empty()) {
         uint8_t *auth_key = new uint8_t[17];
-        memcpy(&auth_key[0], &dll_frame[32], 1);
+        memcpy(&auth_key[0], &apdu[12], 1);
         memcpy(&auth_key[1], &this->auth_key_[0], 16);
 
         ESP_LOGD(TAG, "GCM AUTH Key : %s", format_hex_pretty(auth_key, 17).c_str());
@@ -143,12 +185,12 @@ namespace esphome {
       uint8_t sml_data[512];
 
       //Get dynamic start of cipher text content, byte after the frame counter (nonce), also get dynamic length of the cipher text content
-      aes.decrypt(sml_data, &dll_frame[37], 89);
+      aes.decrypt(sml_data, &apdu[17], sizeof(apdu) - 17);
 
-      uint8_t tag[16];
-      //Get 12 or 16?? bytes gcm tag dynamic from the end of the frame
-      memcpy(&tag[0], &dll_frame[126], sizeof(tag));
-      ESP_LOGD(TAG, "GCM TAG : %s", format_hex_pretty(tag, 16).c_str());
+      uint8_t tag[12];
+      //Get 12 bytes gcm tag dynamic from the end of the frame
+      memcpy(&tag[0], &apdu[sizeof(apdu) - 12], 12);
+      ESP_LOGD(TAG, "GCM TAG : %s", format_hex_pretty(tag, 12).c_str());
 
       if (!aes.checkTag(tag, sizeof(tag))) {
         ESP_LOGE(TAG, "Decryption failed");
@@ -156,7 +198,7 @@ namespace esphome {
         ESP_LOGW(TAG, "Decryption successful");
       }
 
-      ESP_LOGV(TAG, "Crypt data: %s", format_hex_pretty(&dll_frame[37], 101).c_str());
+      ESP_LOGV(TAG, "Crypt data: %s", format_hex_pretty(&apdu[17], sizeof(apdu) - 17).c_str());
       ESP_LOGV(TAG, "Decrypted data: %s", format_hex_pretty(sml_data, sizeof(sml_data)).c_str());
 
       // Gelesene Werte

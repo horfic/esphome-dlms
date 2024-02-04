@@ -42,7 +42,7 @@ def _validate_key(value):
 
 
 def _validate_data_link_layer(value):
-    data_link_layer_supported = ["hdlc", "mbus"]
+    data_link_layer_supported = ["hdlc"]
     if value not in data_link_layer_supported:
         raise cv.Invalid(f"Data Link layer {value} is not supported. Use one of {data_link_layer_supported}")
 
