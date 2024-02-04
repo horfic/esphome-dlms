@@ -83,7 +83,7 @@ namespace esphome {
         // Set apdu length
         if (this->frames_read_ == 1 && this->frame_bytes_read_ == 31) {
           this->apdu_length_ = (this->frame_buffer_[30] << 8) | this->frame_buffer_[31];
-          this->apdu_length_ += 12
+          this->apdu_length_ += 12;
 
           ESP_LOGD(TAG, "APDU length found %i", this->apdu_length_);
         }
