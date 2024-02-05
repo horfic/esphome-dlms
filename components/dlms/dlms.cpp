@@ -120,10 +120,9 @@ namespace esphome {
             continue;
           }
 
+          ESP_LOGD(TAG, "Frames read %i", this->frames_read_);
           ESP_LOGD(TAG, "APDU offset %i", this->apdu_offset_);
           ESP_LOGD(TAG, "APDU length %i", this->apdu_length_);
-          ESP_LOGD(TAG, "Frame length %i", this->frame_length_);
-          ESP_LOGD(TAG, "Frames read %i", this->frames_read_);
           ESP_LOGD(TAG, "Frame : %s", format_hex_pretty(this->frame_buffer_, this->frame_length_).c_str());
 
           size_t apdu_part_length = this->frame_length_ - this->apdu_offset_ - 3;
@@ -137,7 +136,7 @@ namespace esphome {
           }
 
           if (this->apdu_length_ == this->apdu_bytes_read_) {
-            ESP_LOGD(TAG, "APDU complete : %s", format_hex_pretty(this->apdu_buffer_, this->apdu_length_).c_str());
+            ESP_LOGD(TAG, "APDU : %s", format_hex_pretty(this->apdu_buffer_, this->apdu_length_).c_str());
 
             // Decrypt apdu
             this->decrypt_dlms_data(&this->apdu_buffer_[0]);
