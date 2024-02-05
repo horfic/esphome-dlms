@@ -55,8 +55,6 @@ namespace esphome {
           }
         }
 
-        if (this->frame_bytes_read_ == 10 && (uint8_t) c == GCM_START_FLAG)
-
         // Check if frame length is not exceeded
         if ( this->frame_bytes_read_ > 2 && this->frame_bytes_read_ > this->frame_length_) {
           ESP_LOGW(TAG, "Received more bytes as frame length, resetting...");
@@ -131,6 +129,7 @@ namespace esphome {
           ESP_LOGD(TAG, "APDU offset %i", this->apdu_offset_);
           ESP_LOGD(TAG, "APDU buffer size %i", sizeof(this->apdu_buffer_));
           ESP_LOGD(TAG, "Frame length %i", this->frame_length_);
+          ESP_LOGD(TAG, "Frame bytes read %i", this->frame_bytes_read_);
           ESP_LOGD(TAG, "Frame buffer size %i", sizeof(this->frame_buffer_));
           ESP_LOGD(TAG, "Frames read %i", this->frames_read_);
 
