@@ -130,7 +130,7 @@ namespace esphome {
           ESP_LOGD(TAG, "APDU buffer size %d", sizeof(this->apdu_buffer_));
           ESP_LOGD(TAG, "Frame length %i", this->frame_length_);
           ESP_LOGD(TAG, "Frame bytes read %i", this->frame_bytes_read_);
-          ESP_LOGD(TAG, "Frame buffer size %d", sizeof(this->frame_buffer_));
+          ESP_LOGD(TAG, "Frame buffer size %i", sizeof(this->frame_buffer_)/sizeof(this->frame_buffer_[0]));
           ESP_LOGD(TAG, "Frames read %i", this->frames_read_);
 
           memcpy(&this->apdu_buffer_[sizeof(this->apdu_buffer_)], &this->frame_buffer_[this->apdu_offset_], this->frame_length_ - this->apdu_offset_ - 3);
