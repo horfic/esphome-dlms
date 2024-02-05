@@ -21,6 +21,12 @@ namespace esphome {
       while (this->available()) {
         const char c = this->read();
 
+        if (this->frames_read_ > 5) {
+            this->frames_read_ = 0;
+            this->reset_apdu();
+            this->reset_frame();
+        }
+
         // Check if first byte is actually the end byte of the last frame
         if (this->frame_bytes_read_ == 1 && (uint8_t) c == HDLC_FRAME_FLAG) {
           ESP_LOGD(TAG, "Started reading from end flag, skipping...");
