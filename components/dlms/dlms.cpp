@@ -265,7 +265,7 @@ namespace esphome {
       positive_active_instant_power_total = sml_data[82] << 24 | sml_data[83] << 16 | sml_data[84] << 8 | sml_data[85]; // [W]
       ESP_LOGI(TAG, "SML Data 1.7.0: %iW", positive_active_instant_power_total);
 
-      negative_active_energy_total = sml_data[95] << 24 | sml_data[96] << 16 | sml_data[97] << 8 | sml_data[99]; // [KWh]
+      negative_active_energy_total = sml_data[95] << 24 | sml_data[96] << 16 | sml_data[97] << 8 | sml_data[98]; // [KWh]
       ESP_LOGI(TAG, "SML Data 2.8.0: %0.3fkWh", (size_t) negative_active_energy_total / 1000.00);
 
       negative_active_energy_tariff1  = sml_data[108] << 24 | sml_data[109] << 16 | sml_data[110] << 8 | sml_data[111]; // [KWh]
