@@ -130,6 +130,7 @@ namespace esphome {
             this->frames_read_ = 0;
           }
 
+          this->frames_read_ = 0;
           this->reset_frame();
         }
       }
