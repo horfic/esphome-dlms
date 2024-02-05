@@ -119,12 +119,12 @@ namespace esphome {
             continue;
           }
 
-          ESP_LOGD(TAG, "APDU length found %i", this->apdu_length_);
+          ESP_LOGD(TAG, "APDU length %i", this->apdu_length_);
+          ESP_LOGD(TAG, "APDU buffer size %i", sizeof(this->apdu_buffer_));
+          ESP_LOGD(TAG, "Frame buffer size %i", sizeof(this->frame_buffer_));
           ESP_LOGD(TAG, "Frames read %i", this->frames_read_);
 
           if (this->frames_read_ == 1) {
-            this->reset_apdu();
-
             //memcpy(&this->apdu_buffer_[0], &this->frame_buffer_[this->apdu_offset_], this->frame_length_ - this->apdu_offset_ - 3);
           } else {
             //memcpy(&this->apdu_buffer_[sizeof(this->apdu_buffer_)], &this->frame_buffer_[this->apdu_offset_], this->frame_length_ - this->apdu_offset_ - 3);
@@ -136,6 +136,7 @@ namespace esphome {
             //this->decrypt_dlms_data(&this->apdu_buffer_[0]);
 
             this->frames_read_ = 0;
+            this->reset_apdu();
           }
 
           this->reset_frame();
