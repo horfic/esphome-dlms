@@ -21,6 +21,12 @@ namespace esphome {
       while (this->available()) {
         const char c = this->read();
 
+        if (this->frame_bytes_read_ == 1 && (uint8_t) c == HDLC_FRAME_FLAG) {
+          ESP_LOGD(TAG, "Started reading from end flag, resetting...");
+
+          this->reset_frame();
+        }
+
         // Check if frame format type 3 is used
         if (this->frame_bytes_read_ == 1 && (uint8_t) c != HDLC_FRAME_FORMAT_TYPE_3) {
           ESP_LOGD(TAG, "HDLC frame format type is not supported, resetting...");
