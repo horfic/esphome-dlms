@@ -21,11 +21,11 @@ namespace esphome {
       while (this->available()) {
         const char c = this->read();
 
-        if (this->frames_read_ > 5) {
-            this->frames_read_ = 0;
-            this->reset_apdu();
-            this->reset_frame();
-        }
+        //if (this->frames_read_ > 5) {
+        //    this->frames_read_ = 0;
+        //    this->reset_apdu();
+        //    this->reset_frame();
+        //}
 
         // Check if first byte is actually the end byte of the last frame
         if (this->frame_bytes_read_ == 1 && (uint8_t) c == HDLC_FRAME_FLAG) {
@@ -43,7 +43,7 @@ namespace esphome {
         }
 
         // Check if gcm flag is found for frame 1
-        if (this->frames_read_ == 1 && this->frame_bytes_read_ == 19) {
+        if (this->frames_read_ == 0 && this->frame_bytes_read_ == 19) {
           if ((uint8_t) c != GCM_START_FLAG) {
             ESP_LOGD(TAG, "GCM Flag not found in first frame, resetting...");
 
@@ -51,6 +51,7 @@ namespace esphome {
             continue;
           } else {
             this->apdu_offset_ = 20;
+            this->frames_read_ = 1;
           }
         }
 
@@ -82,7 +83,10 @@ namespace esphome {
 
           this->frame_buffer_[this->frame_bytes_read_] = c;
           this->frame_bytes_read_++;
-          this->frames_read_++;
+
+          if (this->frames_read_ == 1) {
+            this->frames_read_++;
+          }
           continue;
         }
 
