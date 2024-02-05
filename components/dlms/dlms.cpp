@@ -95,7 +95,7 @@ namespace esphome {
         }
 
         // Set apdu length
-        if (this->frames_read_ == 1 && this->frame_bytes_read_ == 31) {
+        if (this->frames_read_ == 1 && this->frame_bytes_read_ == 32) {
           this->apdu_length_ = (unsigned) ((this->frame_buffer_[30] << 8) | this->frame_buffer_[31]);
           this->apdu_length_ += 12;
 
