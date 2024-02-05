@@ -21,7 +21,7 @@ namespace esphome {
       while (this->available()) {
         const char c = this->read();
 
-        if (this->frames_read_ > 5) {
+        if (this->frames_read_ > 4) {
             this->frames_read_ = 0;
             this->reset_apdu();
             this->reset_frame();
