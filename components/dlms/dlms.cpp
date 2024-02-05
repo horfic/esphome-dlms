@@ -22,7 +22,7 @@ namespace esphome {
         const char c = this->read();
 
         // Check if first byte is actually the end byte of the last frame
-        if (this->frame_bytes_read_ == 1 && (uint8_t) c == HDLC_FRAME_FLAG && ) {
+        if (this->frame_bytes_read_ == 1 && (uint8_t) c == HDLC_FRAME_FLAG) {
           ESP_LOGD(TAG, "Started reading from end flag, skipping...");
 
           continue;
