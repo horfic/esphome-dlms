@@ -202,8 +202,7 @@ namespace esphome {
         aes.addAuthData(auth_key, 17);
       }
 
-      //What size to set, 88? based on 38 start byte to end of cipher 126 (141 - end flag - 2x crc checksum - 12x gcm tag)
-      uint8_t sml_data[512];
+      uint8_t sml_data[2030];
 
       //Get dynamic start of cipher text content, byte after the frame counter (nonce), also get dynamic length of the cipher text content
       aes.decrypt(sml_data, &apdu[17], this->apdu_length_ - 17);
@@ -219,8 +218,8 @@ namespace esphome {
         ESP_LOGW(TAG, "Decryption successful");
       }
 
-      ESP_LOGV(TAG, "Crypt data: %s", format_hex_pretty(&apdu[17], this->apdu_length_ - 17).c_str());
-      ESP_LOGV(TAG, "Decrypted data: %s", format_hex_pretty(sml_data, sizeof(sml_data)).c_str());
+      ESP_LOGD(TAG, "Crypt data: %s", format_hex_pretty(&apdu[17], this->apdu_length_ - 17).c_str());
+      ESP_LOGD(TAG, "Decrypted data: %s", format_hex_pretty(sml_data, sizeof(sml_data)).c_str());
 
       // Gelesene Werte
       uint16_t Year;
