@@ -221,17 +221,29 @@ namespace esphome {
       ESP_LOGD(TAG, "Crypt data: %s", format_hex_pretty(&apdu[17], this->apdu_length_ - 17).c_str());
       ESP_LOGD(TAG, "Decrypted data: %s", format_hex_pretty(sml_data, sizeof(sml_data)).c_str());
 
-      // Gelesene Werte
+      // Mapping
       uint16_t Year;
       uint8_t Month;
       uint8_t Day;
       uint8_t Hour;
       uint8_t Minute;
       uint8_t Second;
-      uint32_t power_delivered;
-      uint32_t energy_delivered;
-      uint32_t energy_delivered_tariff1;
-      uint32_t energy_delivered_tariff2;
+      uint32_t positive_active_energy_total;
+      uint32_t positive_active_energy_tariff1;
+      uint32_t positive_active_energy_tariff2;
+      uint32_t positive_active_instant_power_total;
+      uint32_t negative_active_energy_total;
+      uint32_t negative_active_energy_tariff1;
+      uint32_t negative_active_energy_tariff2;
+      uint32_t negative_active_instant_power_total;
+      uint32_t positive_reactive_energy_total;
+      uint32_t positive_reactive_energy_tariff1;
+      uint32_t positive_reactive_energy_tariff2;
+      uint32_t positive_reactive_instant_power_total;
+      uint32_t negative_reactive_energy_total;
+      uint32_t negative_reactive_energy_tariff1;
+      uint32_t negative_reactive_energy_tariff2;
+      uint32_t negative_reactive_instant_power_total;
 
       Year = sml_data[22] << 8 | sml_data[23];
       Month = sml_data[24];
@@ -241,17 +253,53 @@ namespace esphome {
       Second = sml_data[29];
       ESP_LOGI(TAG, "SML Data timestamp: %i-%i-%iT%i:%i:%iZ", Year, Month, Day, Hour, Minute, Second);
 
-      power_delivered = sml_data[82] << 24 | sml_data[83] << 16 | sml_data[84] << 8 | sml_data[85]; // [W]
-      ESP_LOGI(TAG, "SML Data power_delivered: %iW", power_delivered);
+      positive_active_energy_total = sml_data[43] << 24 | sml_data[44] << 16 | sml_data[45] << 8 | sml_data[46]; // [KWh]
+      ESP_LOGI(TAG, "SML Data 1.8.0: %0.3fkWh", (size_t) positive_active_energy_total / 1000.00);
 
-      energy_delivered = sml_data[43] << 24 | sml_data[44] << 16 | sml_data[45] << 8 | sml_data[46]; // [KWh]
-      ESP_LOGI(TAG, "SML Data energy_delivered: %0.3fkWh", (size_t) energy_delivered / 1000.00);
+      positive_active_energy_tariff1  = sml_data[56] << 24 | sml_data[57] << 16 | sml_data[58] << 8 | sml_data[59]; // [KWh]
+      ESP_LOGI(TAG, "SML Data 1.8.1: %0.3fkWh", (size_t) positive_active_energy_tariff1 / 1000.00);
 
-      energy_delivered_tariff1  = sml_data[56] << 24 | sml_data[57] << 16 | sml_data[58] << 8 | sml_data[59]; // [KWh]
-      ESP_LOGI(TAG, "SML Data energy_delivered_tariff1: %0.3fkWh", (size_t) energy_delivered_tariff1 / 1000.00);
+      positive_active_energy_tariff2 = sml_data[69] << 24 | sml_data[70] << 16 | sml_data[71] << 8 | sml_data[72]; // [KWh]
+      ESP_LOGI(TAG, "SML Data 1.8.2: %0.3fkWh", (size_t) positive_active_energy_tariff2 / 1000.00);
 
-      energy_delivered_tariff2 = sml_data[69] << 24 | sml_data[70] << 16 | sml_data[71] << 8 | sml_data[72]; // [KWh]
-      ESP_LOGI(TAG, "SML Data energy_delivered_tariff2: %0.3fkWh", (size_t) energy_delivered_tariff2 / 1000.00);
+      positive_active_instant_power_total = sml_data[82] << 24 | sml_data[83] << 16 | sml_data[84] << 8 | sml_data[85]; // [W]
+      ESP_LOGI(TAG, "SML Data 1.7.0: %iW", positive_active_instant_power_total);
+
+      negative_active_energy_total = sml_data[95] << 24 | sml_data[96] << 16 | sml_data[97] << 8 | sml_data[99]; // [KWh]
+      ESP_LOGI(TAG, "SML Data 2.8.0: %0.3fkWh", (size_t) negative_active_energy_total / 1000.00);
+
+      negative_active_energy_tariff1  = sml_data[108] << 24 | sml_data[109] << 16 | sml_data[110] << 8 | sml_data[111]; // [KWh]
+      ESP_LOGI(TAG, "SML Data 2.8.1: %0.3fkWh", (size_t) negative_active_energy_tariff1 / 1000.00);
+
+      negative_active_energy_tariff2 = sml_data[121] << 24 | sml_data[122] << 16 | sml_data[123] << 8 | sml_data[124]; // [KWh]
+      ESP_LOGI(TAG, "SML Data 2.8.2: %0.3fkWh", (size_t) negative_active_energy_tariff2 / 1000.00);
+
+      negative_active_instant_power_total = sml_data[134] << 24 | sml_data[135] << 16 | sml_data[136] << 8 | sml_data[137]; // [W]
+      ESP_LOGI(TAG, "SML Data 2.7.0: %iW", negative_active_instant_power_total);
+
+      positive_reactive_energy_total = sml_data[147] << 24 | sml_data[148] << 16 | sml_data[149] << 8 | sml_data[150]; // [kvarh]
+      ESP_LOGI(TAG, "SML Data 3.8.0: %0.3fkvarh", (size_t) positive_reactive_energy_total / 1000.00);
+
+      positive_reactive_energy_tariff1  = sml_data[160] << 24 | sml_data[161] << 16 | sml_data[162] << 8 | sml_data[163]; // [kvarh]
+      ESP_LOGI(TAG, "SML Data 3.8.1: %0.3fkvarh", (size_t) positive_reactive_energy_tariff1 / 1000.00);
+
+      positive_reactive_energy_tariff2 = sml_data[173] << 24 | sml_data[174] << 16 | sml_data[175] << 8 | sml_data[176]; // [kvarh]
+      ESP_LOGI(TAG, "SML Data 3.8.2: %0.3fkvarh", (size_t) positive_reactive_energy_tariff2 / 1000.00);
+
+      positive_reactive_instant_power_total = sml_data[186] << 24 | sml_data[187] << 16 | sml_data[188] << 8 | sml_data[189]; // [kvar]
+      ESP_LOGI(TAG, "SML Data 3.7.0: %ikvar", positive_reactive_instant_power_total);
+
+      negative_reactive_energy_total = sml_data[199] << 24 | sml_data[200] << 16 | sml_data[201] << 8 | sml_data[202]; // [kvarh]
+      ESP_LOGI(TAG, "SML Data 4.8.0: %0.3fkvarh", (size_t) negative_reactive_energy_total / 1000.00);
+
+      negative_reactive_energy_tariff1  = sml_data[212] << 24 | sml_data[213] << 16 | sml_data[214] << 8 | sml_data[215]; // [kvarh]
+      ESP_LOGI(TAG, "SML Data 4.8.1: %0.3fkvarh", (size_t) negative_reactive_energy_tariff1 / 1000.00);
+
+      negative_reactive_energy_tariff2 = sml_data[225] << 24 | sml_data[226] << 16 | sml_data[227] << 8 | sml_data[228]; // [kvarh]
+      ESP_LOGI(TAG, "SML Data 4.8.2: %0.3fkvarh", (size_t) negative_reactive_energy_tariff2 / 1000.00);
+
+      negative_reactive_instant_power_total = sml_data[238] << 24 | sml_data[239] << 16 | sml_data[240] << 8 | sml_data[241]; // [kvar]
+      ESP_LOGI(TAG, "SML Data 4.7.0: %ikvar", negative_reactive_instant_power_total);
     }
 
     bool Dlms::crc16_check(uint8_t *data, size_t data_size) {
