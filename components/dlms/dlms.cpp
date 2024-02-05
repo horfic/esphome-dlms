@@ -78,6 +78,8 @@ namespace esphome {
           this->frame_length_ = (unsigned) c + 2;
 
           ESP_LOGD(TAG, "Frame length found %i", this->frame_length_);
+
+          ESP_LOGD(TAG, "Frames read %i", this->frames_read_);
         }
 
         // Set apdu length
