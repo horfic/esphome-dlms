@@ -135,7 +135,7 @@ namespace esphome {
 
           memcpy(&this->apdu_buffer_[sizeof(this->apdu_buffer_)], &this->frame_buffer_[this->apdu_offset_], this->frame_length_ - this->apdu_offset_ - 3);
 
-          ESP_LOGD(TAG, "Frame : %s", format_hex_pretty(this->frame_buffer_, sizeof(this->frame_buffer_)).c_str());
+          ESP_LOGD(TAG, "Frame : %s", format_hex_pretty(this->frame_buffer_, this->frame_bytes_read_).c_str());
           ESP_LOGD(TAG, "APDU : %s", format_hex_pretty(this->apdu_buffer_, sizeof(this->apdu_buffer_)).c_str());
 
           if (this->apdu_length_ <= sizeof(this->apdu_buffer_)) {
