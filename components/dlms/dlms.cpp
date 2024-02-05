@@ -82,7 +82,8 @@ namespace esphome {
 
         // Set apdu length
         if (this->frames_read_ == 1 && this->frame_bytes_read_ == 31) {
-          this->apdu_length_ = (this->frame_buffer_[30] << 8) | this->frame_buffer_[31];
+          //this->apdu_length_ = (this->frame_buffer_[30] << 8) | this->frame_buffer_[31];
+          this->apdu_length_ = 259;
           this->apdu_length_ += 12;
 
           ESP_LOGD(TAG, "APDU length found %i", this->apdu_length_);
@@ -122,7 +123,7 @@ namespace esphome {
           if (this->apdu_length_ >= sizeof(this->apdu_buffer_)) {
             ESP_LOGD(TAG, "APDU complete : %s", format_hex_pretty(this->apdu_buffer_, this->apdu_length_).c_str());
             // Decrypt apdu
-            this->decrypt_dlms_data(&this->apdu_buffer_[0]);
+            //this->decrypt_dlms_data(&this->apdu_buffer_[0]);
 
             this->frames_read_ = 0;
           }
