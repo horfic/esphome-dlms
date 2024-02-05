@@ -100,6 +100,7 @@ namespace esphome {
           this->apdu_length_ += 12;
 
           ESP_LOGD(TAG, "APDU length found %i", this->apdu_length_);
+          ESP_LOGD(TAG, "APDU length bytes : %s", format_hex_pretty(&this->frame_buffer_[30], 2).c_str());
         }
 
         // Continue hdlc frame building
