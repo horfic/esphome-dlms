@@ -40,6 +40,7 @@ namespace esphome {
 
           uint8_t *apdu_buffer_{nullptr};
           size_t apdu_length_{0};
+          size_t apdu_bytes_read_{0};
           size_t apdu_offset_{0};
       };
   }  // namespace dsmr

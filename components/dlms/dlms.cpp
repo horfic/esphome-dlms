@@ -11,7 +11,6 @@ namespace esphome {
     static const char *const TAG = "dlms";
 
     void Dlms::setup() {
-      this->frames_read_ = 0;
       this->reset_apdu();
       this->reset_frame();
     }
@@ -22,7 +21,6 @@ namespace esphome {
         const char c = this->read();
 
         if (this->frames_read_ > 4) {
-            this->frames_read_ = 0;
             this->reset_apdu();
             this->reset_frame();
         }
@@ -127,23 +125,26 @@ namespace esphome {
           }
 
           ESP_LOGD(TAG, "APDU offset %i", this->apdu_offset_);
-          ESP_LOGD(TAG, "APDU buffer size %d", sizeof(this->apdu_buffer_));
+          ESP_LOGD(TAG, "APDU length %i", this->apdu_length_);
+          ESP_LOGD(TAG, "APDU bytes read %i", this->apdu_bytes_read_);
           ESP_LOGD(TAG, "Frame length %i", this->frame_length_);
           ESP_LOGD(TAG, "Frame bytes read %i", this->frame_bytes_read_);
-          ESP_LOGD(TAG, "Frame buffer size %i", sizeof(this->frame_buffer_)/sizeof(this->frame_buffer_[0]));
           ESP_LOGD(TAG, "Frames read %i", this->frames_read_);
 
-          memcpy(&this->apdu_buffer_[sizeof(this->apdu_buffer_)], &this->frame_buffer_[this->apdu_offset_], this->frame_length_ - this->apdu_offset_ - 3);
+          size_t apdu_part_length = this->frame_length_ - this->apdu_offset_ - 3;
+
+          memcpy(&this->apdu_buffer_[this->apdu_bytes_read_], &this->frame_buffer_[this->apdu_offset_], apdu_part_length);
+
+          this->apdu_bytes_read_ += apdu_part_length;
 
           ESP_LOGD(TAG, "Frame : %s", format_hex_pretty(this->frame_buffer_, this->frame_bytes_read_).c_str());
-          ESP_LOGD(TAG, "APDU : %s", format_hex_pretty(this->apdu_buffer_, sizeof(this->apdu_buffer_)).c_str());
+          ESP_LOGD(TAG, "APDU : %s", format_hex_pretty(this->apdu_buffer_, this->apdu_bytes_read_).c_str());
 
-          if (this->apdu_length_ <= sizeof(this->apdu_buffer_)) {
+          if (this->apdu_length_ <= this->apdu_bytes_read_) {
             //ESP_LOGD(TAG, "APDU complete : %s", format_hex_pretty(this->apdu_buffer_, this->apdu_length_).c_str());
             // Decrypt apdu
             //this->decrypt_dlms_data(&this->apdu_buffer_[0]);
 
-            this->frames_read_ = 0;
             this->reset_apdu();
           }
 
@@ -158,6 +159,8 @@ namespace esphome {
 
     void Dlms::reset_apdu() {
       this->apdu_length_ = 0;
+      this->apdu_bytes_read_ = 0;
+      this->frames_read_ = 0;
 
       delete[] this->apdu_buffer_;
       this->apdu_buffer_ = new uint8_t[2030];
