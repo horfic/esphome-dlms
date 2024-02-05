@@ -277,29 +277,29 @@ namespace esphome {
       negative_active_instant_power_total = sml_data[134] << 24 | sml_data[135] << 16 | sml_data[136] << 8 | sml_data[137]; // [W]
       ESP_LOGI(TAG, "SML Data 2.7.0: %iW", negative_active_instant_power_total);
 
-      positive_reactive_energy_total = sml_data[147] << 24 | sml_data[148] << 16 | sml_data[149] << 8 | sml_data[150]; // [kvarh]
-      ESP_LOGI(TAG, "SML Data 3.8.0: %0.3fkvarh", (size_t) positive_reactive_energy_total / 1000.00);
+      positive_reactive_energy_total = sml_data[147] << 24 | sml_data[148] << 16 | sml_data[149] << 8 | sml_data[150]; // [kVArh]
+      ESP_LOGI(TAG, "SML Data 3.8.0: %0.3fkVArh", (size_t) positive_reactive_energy_total / 1000.00);
 
-      positive_reactive_energy_tariff1  = sml_data[160] << 24 | sml_data[161] << 16 | sml_data[162] << 8 | sml_data[163]; // [kvarh]
-      ESP_LOGI(TAG, "SML Data 3.8.1: %0.3fkvarh", (size_t) positive_reactive_energy_tariff1 / 1000.00);
+      positive_reactive_energy_tariff1  = sml_data[160] << 24 | sml_data[161] << 16 | sml_data[162] << 8 | sml_data[163]; // [kVArh]
+      ESP_LOGI(TAG, "SML Data 3.8.1: %0.3fkVArh", (size_t) positive_reactive_energy_tariff1 / 1000.00);
 
-      positive_reactive_energy_tariff2 = sml_data[173] << 24 | sml_data[174] << 16 | sml_data[175] << 8 | sml_data[176]; // [kvarh]
-      ESP_LOGI(TAG, "SML Data 3.8.2: %0.3fkvarh", (size_t) positive_reactive_energy_tariff2 / 1000.00);
+      positive_reactive_energy_tariff2 = sml_data[173] << 24 | sml_data[174] << 16 | sml_data[175] << 8 | sml_data[176]; // [kVArh]
+      ESP_LOGI(TAG, "SML Data 3.8.2: %0.3fkVArh", (size_t) positive_reactive_energy_tariff2 / 1000.00);
 
-      positive_reactive_instant_power_total = sml_data[186] << 24 | sml_data[187] << 16 | sml_data[188] << 8 | sml_data[189]; // [kvar]
-      ESP_LOGI(TAG, "SML Data 3.7.0: %ikvar", positive_reactive_instant_power_total);
+      positive_reactive_instant_power_total = sml_data[186] << 24 | sml_data[187] << 16 | sml_data[188] << 8 | sml_data[189]; // [kVAr]
+      ESP_LOGI(TAG, "SML Data 3.7.0: %ikVAr", positive_reactive_instant_power_total);
 
-      negative_reactive_energy_total = sml_data[199] << 24 | sml_data[200] << 16 | sml_data[201] << 8 | sml_data[202]; // [kvarh]
-      ESP_LOGI(TAG, "SML Data 4.8.0: %0.3fkvarh", (size_t) negative_reactive_energy_total / 1000.00);
+      negative_reactive_energy_total = sml_data[199] << 24 | sml_data[200] << 16 | sml_data[201] << 8 | sml_data[202]; // [kVArh]
+      ESP_LOGI(TAG, "SML Data 4.8.0: %0.3fkVArh", (size_t) negative_reactive_energy_total / 1000.00);
 
-      negative_reactive_energy_tariff1  = sml_data[212] << 24 | sml_data[213] << 16 | sml_data[214] << 8 | sml_data[215]; // [kvarh]
-      ESP_LOGI(TAG, "SML Data 4.8.1: %0.3fkvarh", (size_t) negative_reactive_energy_tariff1 / 1000.00);
+      negative_reactive_energy_tariff1  = sml_data[212] << 24 | sml_data[213] << 16 | sml_data[214] << 8 | sml_data[215]; // [kVArh]
+      ESP_LOGI(TAG, "SML Data 4.8.1: %0.3fkVArh", (size_t) negative_reactive_energy_tariff1 / 1000.00);
 
-      negative_reactive_energy_tariff2 = sml_data[225] << 24 | sml_data[226] << 16 | sml_data[227] << 8 | sml_data[228]; // [kvarh]
-      ESP_LOGI(TAG, "SML Data 4.8.2: %0.3fkvarh", (size_t) negative_reactive_energy_tariff2 / 1000.00);
+      negative_reactive_energy_tariff2 = sml_data[225] << 24 | sml_data[226] << 16 | sml_data[227] << 8 | sml_data[228]; // [kVArh]
+      ESP_LOGI(TAG, "SML Data 4.8.2: %0.3fkVArh", (size_t) negative_reactive_energy_tariff2 / 1000.00);
 
-      negative_reactive_instant_power_total = sml_data[238] << 24 | sml_data[239] << 16 | sml_data[240] << 8 | sml_data[241]; // [kvar]
-      ESP_LOGI(TAG, "SML Data 4.7.0: %ikvar", negative_reactive_instant_power_total);
+      negative_reactive_instant_power_total = sml_data[238] << 24 | sml_data[239] << 16 | sml_data[240] << 8 | sml_data[241]; // [kVAr]
+      ESP_LOGI(TAG, "SML Data 4.7.0: %ikVAr", negative_reactive_instant_power_total);
     }
 
     bool Dlms::crc16_check(uint8_t *data, size_t data_size) {
