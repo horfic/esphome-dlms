@@ -20,11 +20,6 @@ namespace esphome {
       while (this->available()) {
         const char c = this->read();
 
-        //if (this->frames_read_ > 4) {
-        //    this->reset_apdu();
-        //    this->reset_frame();
-        //}
-
         // Check if first byte is actually the end byte of the last frame
         if (this->frame_bytes_read_ == 1 && (uint8_t) c == HDLC_FRAME_FLAG) {
           ESP_LOGD(TAG, "Started reading from end flag, skipping...");
@@ -100,7 +95,6 @@ namespace esphome {
           this->apdu_length_ += 12;
 
           ESP_LOGD(TAG, "APDU length found %i", this->apdu_length_);
-          ESP_LOGD(TAG, "APDU length bytes : %s", format_hex_pretty(&this->frame_buffer_[30], 2).c_str());
         }
 
         // Continue hdlc frame building
@@ -118,13 +112,13 @@ namespace esphome {
           // ToDo - calculate destination and source address lengths https://github.com/alekslt/HANToMQTT/blob/master/DlmsReader.cpp#L436
 
           // Validating hdlc frame
-          //bool is_valid_frame = this->crc16_check(&this->frame_buffer_[1], this->frame_bytes_read_ -2);
-          //if (!is_valid_frame) {
-          //  ESP_LOGW(TAG, "HDLC frame validation failed, resetting...");
+          bool is_valid_frame = this->crc16_check(&this->frame_buffer_[1], this->frame_bytes_read_ -2);
+          if (!is_valid_frame) {
+            ESP_LOGW(TAG, "HDLC frame validation failed, resetting...");
 
-          //  this->reset_frame();
-          //  continue;
-          //}
+            this->reset_frame();
+            continue;
+          }
 
           ESP_LOGD(TAG, "APDU offset %i", this->apdu_offset_);
           ESP_LOGD(TAG, "APDU length %i", this->apdu_length_);
@@ -143,9 +137,10 @@ namespace esphome {
           }
 
           if (this->apdu_length_ == this->apdu_bytes_read_) {
-            //ESP_LOGD(TAG, "APDU complete : %s", format_hex_pretty(this->apdu_buffer_, this->apdu_length_).c_str());
+            ESP_LOGD(TAG, "APDU complete : %s", format_hex_pretty(this->apdu_buffer_, this->apdu_length_).c_str());
+
             // Decrypt apdu
-            //this->decrypt_dlms_data(&this->apdu_buffer_[0]);
+            this->decrypt_dlms_data(&this->apdu_buffer_[0]);
 
             this->reset_apdu();
           }
