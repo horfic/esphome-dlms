@@ -102,7 +102,6 @@ namespace esphome {
           this->apdu_length_ = (unsigned) ((this->frame_buffer_[30] << 8) | this->frame_buffer_[31]);
           this->apdu_length_ += 12;
 
-          ESP_LOGD(TAG, "APDU test : %s", format_hex_pretty(&this->frame_buffer_[30], 2).c_str());
           ESP_LOGD(TAG, "APDU length found %i", this->apdu_length_);
         }
 
@@ -129,7 +128,6 @@ namespace esphome {
             continue;
           }
 
-          ESP_LOGD(TAG, "APDU length %i", this->apdu_length_);
           ESP_LOGD(TAG, "APDU offset %i", this->apdu_offset_);
           ESP_LOGD(TAG, "APDU buffer size %i", sizeof(this->apdu_buffer_));
           ESP_LOGD(TAG, "Frame length %i", this->frame_length_);
@@ -137,6 +135,9 @@ namespace esphome {
           ESP_LOGD(TAG, "Frames read %i", this->frames_read_);
 
           memcpy(&this->apdu_buffer_[sizeof(this->apdu_buffer_)], &this->frame_buffer_[this->apdu_offset_], this->frame_length_ - this->apdu_offset_ - 3);
+
+          ESP_LOGD(TAG, "Frame : %s", format_hex_pretty(this->frame_buffer_, sizeof(this->frame_buffer_)).c_str());
+          ESP_LOGD(TAG, "APDU : %s", format_hex_pretty(this->apdu_buffer_, sizeof(this->apdu_buffer_)).c_str());
 
           if (this->apdu_length_ <= sizeof(this->apdu_buffer_)) {
             //ESP_LOGD(TAG, "APDU complete : %s", format_hex_pretty(this->apdu_buffer_, this->apdu_length_).c_str());
