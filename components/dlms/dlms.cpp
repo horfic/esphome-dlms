@@ -20,10 +20,10 @@ namespace esphome {
       while (this->available()) {
         const char c = this->read();
 
-        if (this->frames_read_ > 4) {
-            this->reset_apdu();
-            this->reset_frame();
-        }
+        //if (this->frames_read_ > 4) {
+        //    this->reset_apdu();
+        //    this->reset_frame();
+        //}
 
         // Check if first byte is actually the end byte of the last frame
         if (this->frame_bytes_read_ == 1 && (uint8_t) c == HDLC_FRAME_FLAG) {
@@ -129,6 +129,7 @@ namespace esphome {
           ESP_LOGD(TAG, "APDU length %i", this->apdu_length_);
           ESP_LOGD(TAG, "Frame length %i", this->frame_length_);
           ESP_LOGD(TAG, "Frames read %i", this->frames_read_);
+          ESP_LOGD(TAG, "Frame : %s", format_hex_pretty(this->frame_buffer_, this->frame_length_).c_str());
 
           size_t apdu_part_length = this->frame_length_ - this->apdu_offset_ - 3;
 
@@ -136,10 +137,12 @@ namespace esphome {
 
           this->apdu_bytes_read_ += apdu_part_length;
 
-          if (this->apdu_length_ <= this->apdu_bytes_read_) {
-            ESP_LOGD(TAG, "-APDU bytes read %i", this->apdu_bytes_read_);
-            ESP_LOGD(TAG, "-APDU length %i", this->apdu_length_);
-            ESP_LOGD(TAG, "-APDU complete : %s", format_hex_pretty(this->apdu_buffer_, this->apdu_length_).c_str());
+          if (this->apdu_length_ < this->apdu_bytes_read_) {
+            this->reset_apdu();
+          }
+
+          if (this->apdu_length_ == this->apdu_bytes_read_) {
+            //ESP_LOGD(TAG, "APDU complete : %s", format_hex_pretty(this->apdu_buffer_, this->apdu_length_).c_str());
             // Decrypt apdu
             //this->decrypt_dlms_data(&this->apdu_buffer_[0]);
 
