@@ -22,11 +22,11 @@ DB.................startbyte for aes128-gcm
 4C.................L (string), system title
 47.................G (string), system title
 5A.................Z (string), system title
-67.................g (string) 103 (dec), system title, possible some bit shifting to get the serial number 1030756480681
-73.................s (string) 115 (dec), system title, possible some bit shifting to get the serial number 1030756480681
-5D.................] (string) 93 (dec), system title, possible some bit shifting to get the serial number 1030756480681
-D3.................Ó (string) 211 (dec), system title, possible some bit shifting to get the serial number 1030756480681
-A9.................© (string) 169 (dec), system title, possible some bit shifting to get the serial number 1030756480681
+67.................g (string) 103 (dec), system title, possible some bit shifting to get the serial number 10307-56480681
+73.................s (string) 115 (dec), system title, possible some bit shifting to get the serial number 10307-56480681
+5D.................] (string) 93 (dec), system title, possible some bit shifting to get the serial number 10307-56480681
+D3.................Ó (string) 211 (dec), system title, possible some bit shifting to get the serial number 10307-56480681
+A9.................© (string) 169 (dec), system title, possible some bit shifting to get the serial number 10307-56480681
 82.................undocumented
 01.................length of security header (control byte and invocation counter) + apdu bytes e.g. 0x0103 = 259
 03.................length of security header (control byte and invocation counter) + apdu bytes e.g. 0x0103 = 259

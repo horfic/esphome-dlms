@@ -192,7 +192,7 @@ namespace esphome {
       aes.setKey(decryption_key, 16);
         ESP_LOGD(TAG, "GCM Decryption Key : %s", format_hex_pretty(decryption_key, 16).c_str());
 
-      //Only enable auth when auth key is set, possible check also with security byte is 0x30? 0x20 seams to only tell to do encryption
+      //Only enable auth when auth key is set, possible check also with security byte is 0x30, 0x50 and 0x70 to force enable it and throw an error?
       if (!this->auth_key_.empty()) {
         uint8_t *auth_key = new uint8_t[17];
         memcpy(&auth_key[0], &apdu[12], 1);

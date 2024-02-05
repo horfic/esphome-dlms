@@ -16,7 +16,8 @@ https://github.com/aburgr/smartmeter-reader/blob/main/decode.py#L48
 Cosem information
 https://web.archive.org/web/20170921113529/http://dlms.com/documents/archive/Excerpt_BB10.pdf
 
-
+Manufacturer list
+https://www.dlms.com/flag-id-directory/
 
 forum
 --------------------
