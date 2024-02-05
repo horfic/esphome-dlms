@@ -46,6 +46,7 @@ namespace esphome {
             ESP_LOGD(TAG, "GCM Flag not found in first frame, resetting...");
 
             this->reset_frame();
+            this->reset_apdu();
             continue;
           } else {
             this->apdu_offset_ = 20;
@@ -116,19 +117,17 @@ namespace esphome {
           // ToDo - calculate destination and source address lengths https://github.com/alekslt/HANToMQTT/blob/master/DlmsReader.cpp#L436
 
           // Validating hdlc frame
-          bool is_valid_frame = this->crc16_check(&this->frame_buffer_[1], this->frame_bytes_read_ -2);
-          if (!is_valid_frame) {
-            ESP_LOGW(TAG, "HDLC frame validation failed, resetting...");
+          //bool is_valid_frame = this->crc16_check(&this->frame_buffer_[1], this->frame_bytes_read_ -2);
+          //if (!is_valid_frame) {
+          //  ESP_LOGW(TAG, "HDLC frame validation failed, resetting...");
 
-            this->reset_frame();
-            continue;
-          }
+          //  this->reset_frame();
+          //  continue;
+          //}
 
           ESP_LOGD(TAG, "APDU offset %i", this->apdu_offset_);
           ESP_LOGD(TAG, "APDU length %i", this->apdu_length_);
-          ESP_LOGD(TAG, "APDU bytes read %i", this->apdu_bytes_read_);
           ESP_LOGD(TAG, "Frame length %i", this->frame_length_);
-          ESP_LOGD(TAG, "Frame bytes read %i", this->frame_bytes_read_);
           ESP_LOGD(TAG, "Frames read %i", this->frames_read_);
 
           size_t apdu_part_length = this->frame_length_ - this->apdu_offset_ - 3;
@@ -136,9 +135,6 @@ namespace esphome {
           memcpy(&this->apdu_buffer_[this->apdu_bytes_read_], &this->frame_buffer_[this->apdu_offset_], apdu_part_length);
 
           this->apdu_bytes_read_ += apdu_part_length;
-
-          //ESP_LOGD(TAG, "Frame : %s", format_hex_pretty(this->frame_buffer_, this->frame_bytes_read_).c_str());
-          //ESP_LOGD(TAG, "APDU : %s", format_hex_pretty(this->apdu_buffer_, this->apdu_bytes_read_).c_str());
 
           if (this->apdu_length_ <= this->apdu_bytes_read_) {
             ESP_LOGD(TAG, "-APDU bytes read %i", this->apdu_bytes_read_);
@@ -212,11 +208,11 @@ namespace esphome {
       uint8_t sml_data[512];
 
       //Get dynamic start of cipher text content, byte after the frame counter (nonce), also get dynamic length of the cipher text content
-      aes.decrypt(sml_data, &apdu[17], sizeof(apdu) - 17);
+      aes.decrypt(sml_data, &apdu[17], this->apdu_length_ - 17);
 
       uint8_t tag[12];
       //Get 12 bytes gcm tag dynamic from the end of the frame
-      memcpy(&tag[0], &apdu[sizeof(apdu) - 12], 12);
+      memcpy(&tag[0], &apdu[this->apdu_length_ - 12], 12);
       ESP_LOGD(TAG, "GCM TAG : %s", format_hex_pretty(tag, 12).c_str());
 
       if (!aes.checkTag(tag, sizeof(tag))) {
@@ -225,7 +221,7 @@ namespace esphome {
         ESP_LOGW(TAG, "Decryption successful");
       }
 
-      ESP_LOGV(TAG, "Crypt data: %s", format_hex_pretty(&apdu[17], sizeof(apdu) - 17).c_str());
+      ESP_LOGV(TAG, "Crypt data: %s", format_hex_pretty(&apdu[17], this->apdu_length_ - 17).c_str());
       ESP_LOGV(TAG, "Decrypted data: %s", format_hex_pretty(sml_data, sizeof(sml_data)).c_str());
 
       // Gelesene Werte
