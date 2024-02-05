@@ -16,7 +16,7 @@ namespace esphome {
       this->reset_frame();
     }
 
-    // ToDo - implement max hdlc frame size of 250?? and max pdu size of 1200??, configurable timeout (11 sec) and buffer size (2048)
+    // ToDo - implement max hdlc frame size of 250?? and max pdu size of 2030??, configurable timeout (11 sec) and buffer size (2048)
     void Dlms::loop() {
       while (this->available()) {
         const char c = this->read();
@@ -116,7 +116,7 @@ namespace esphome {
 
             memcpy(&this->apdu_buffer_[0], &this->frame_buffer_[this->apdu_offset_], this->frame_length_ - this->apdu_offset_ - 3);
           } else {
-            memcpy(&this->apdu_buffer_[sizeof(this->apdu_buffer_) + 1], &this->frame_buffer_[this->apdu_offset_], this->frame_length_ - this->apdu_offset_ - 3);
+            memcpy(&this->apdu_buffer_[sizeof(this->apdu_buffer_)], &this->frame_buffer_[this->apdu_offset_], this->frame_length_ - this->apdu_offset_ - 3);
           }
 
           if (this->apdu_length_ >= sizeof(this->apdu_buffer_)) {
@@ -139,11 +139,13 @@ namespace esphome {
     void Dlms::reset_apdu() {
       this->apdu_length_ = 0;
 
-      memset(&this->apdu_buffer_, 0x00, sizeof(this->apdu_buffer_));
+      delete[] this->apdu_buffer_;
+      this->apdu_buffer_ = new uint8_t[2030];
     }
 
     void Dlms::reset_frame() {
-      memset(&this->frame_buffer_, 0x00, sizeof(this->frame_buffer_));
+      delete[] this->frame_buffer_;
+      this->frame_buffer_ = new uint8_t[250];
 
       this->frame_bytes_read_ = 0;
       this->frame_length_ = 0;
