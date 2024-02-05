@@ -21,10 +21,11 @@ namespace esphome {
       while (this->available()) {
         const char c = this->read();
 
-        if (this->frame_bytes_read_ == 1 && (uint8_t) c == HDLC_FRAME_FLAG) {
-          ESP_LOGD(TAG, "Started reading from end flag, resetting...");
+        // Check if first byte is actually the end byte of the last frame
+        if (this->frame_bytes_read_ == 1 && (uint8_t) c == HDLC_FRAME_FLAG && ) {
+          ESP_LOGD(TAG, "Started reading from end flag, skipping...");
 
-          this->reset_frame();
+          continue;
         }
 
         // Check if frame format type 3 is used
@@ -84,8 +85,6 @@ namespace esphome {
           this->frame_length_ = (unsigned) c + 2;
 
           ESP_LOGD(TAG, "Frame length found %i", this->frame_length_);
-
-          ESP_LOGD(TAG, "Frames read %i", this->frames_read_);
         }
 
         // Set apdu length
@@ -120,6 +119,9 @@ namespace esphome {
             continue;
           }
 
+          ESP_LOGD(TAG, "APDU length found %i", this->apdu_length_);
+          ESP_LOGD(TAG, "Frames read %i", this->frames_read_);
+
           if (this->frames_read_ == 1) {
             this->reset_apdu();
 
@@ -136,7 +138,6 @@ namespace esphome {
             this->frames_read_ = 0;
           }
 
-          this->frames_read_ = 0;
           this->reset_frame();
         }
       }
