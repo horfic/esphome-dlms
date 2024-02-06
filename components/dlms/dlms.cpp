@@ -222,7 +222,7 @@ namespace esphome {
       ESP_LOGD(TAG, "Decrypted data: %s", format_hex_pretty(sml_data, sizeof(sml_data)).c_str());
 
       if (this->s_manufacturer_ != nullptr) {
-        this->s_manufacturer_->publish_state(format_hex_pretty(iv, 3).c_str());
+        this->s_manufacturer_->publish_state(std::to_string(iv[0]) + std::to_string(iv[1]) + std::to_string(iv[2]));
       }
 
       // Mapping
