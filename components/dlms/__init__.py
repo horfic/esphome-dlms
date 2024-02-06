@@ -1,4 +1,3 @@
-import re
 import esphome.config_validation as cv
 import esphome.codegen as cg
 from esphome.components import uart
@@ -10,7 +9,7 @@ MULTI_CONF = True
 
 DEPENDENCIES = ["uart"]
 
-AUTO_LOAD = ["sensor"]
+AUTO_LOAD = ["sensor", "text_sensor"]
 
 CONF_DLMS_ID = "dlms_id"
 CONF_DATA_LINK_LAYER = "data_link_layer"
