@@ -221,6 +221,10 @@ namespace esphome {
       ESP_LOGD(TAG, "Crypt data: %s", format_hex_pretty(&apdu[17], this->apdu_length_ - 17).c_str());
       ESP_LOGD(TAG, "Decrypted data: %s", format_hex_pretty(sml_data, sizeof(sml_data)).c_str());
 
+      if (this->s_manufacturer_ != nullptr) {
+        this->s_manufacturer_->publish_state(format_hex_pretty(iv, 3).c_str());
+      }
+
       // Mapping
       uint16_t Year;
       uint8_t Month;
