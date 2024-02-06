@@ -259,57 +259,117 @@ namespace esphome {
         this->s_timestamp_->publish_state(timestamp_string);
       }
 
-      positive_active_energy_total = sml_data[43] << 24 | sml_data[44] << 16 | sml_data[45] << 8 | sml_data[46]; // [KWh]
+      positive_active_energy_total = sml_data[43] << 24 | sml_data[44] << 16 | sml_data[45] << 8 | sml_data[46]; // [Wh]
       ESP_LOGI(TAG, "SML Data 1.8.0: %0.3fkWh", (size_t) positive_active_energy_total / 1000.00);
 
       if (this->s_positive_active_energy_total_ != nullptr) {
         this->s_positive_active_energy_total_->publish_state((size_t) positive_active_energy_total / 1000.00);
       }
 
-      positive_active_energy_tariff1  = sml_data[56] << 24 | sml_data[57] << 16 | sml_data[58] << 8 | sml_data[59]; // [KWh]
+      positive_active_energy_tariff1  = sml_data[56] << 24 | sml_data[57] << 16 | sml_data[58] << 8 | sml_data[59]; // [Wh]
       ESP_LOGI(TAG, "SML Data 1.8.1: %0.3fkWh", (size_t) positive_active_energy_tariff1 / 1000.00);
 
-      positive_active_energy_tariff2 = sml_data[69] << 24 | sml_data[70] << 16 | sml_data[71] << 8 | sml_data[72]; // [KWh]
+      if (this->s_positive_active_energy_tariff1_ != nullptr) {
+        this->s_positive_active_energy_tariff1_->publish_state((size_t) positive_active_energy_tariff1 / 1000.00);
+      }
+
+      positive_active_energy_tariff2 = sml_data[69] << 24 | sml_data[70] << 16 | sml_data[71] << 8 | sml_data[72]; // [Wh]
       ESP_LOGI(TAG, "SML Data 1.8.2: %0.3fkWh", (size_t) positive_active_energy_tariff2 / 1000.00);
 
-      positive_active_instant_power_total = sml_data[82] << 24 | sml_data[83] << 16 | sml_data[84] << 8 | sml_data[85]; // [W]
-      ESP_LOGI(TAG, "SML Data 1.7.0: %iW", positive_active_instant_power_total);
+      if (this->s_positive_active_energy_tariff2_ != nullptr) {
+        this->s_positive_active_energy_tariff2_->publish_state((size_t) positive_active_energy_tariff2 / 1000.00);
+      }
 
-      negative_active_energy_total = sml_data[95] << 24 | sml_data[96] << 16 | sml_data[97] << 8 | sml_data[98]; // [KWh]
+      positive_active_instant_power_total = sml_data[82] << 24 | sml_data[83] << 16 | sml_data[84] << 8 | sml_data[85]; // [W]
+      ESP_LOGI(TAG, "SML Data 1.7.0: %0.3fkW", (size_t) positive_active_instant_power_total / 1000.00);
+
+      if (this->s_positive_active_instant_power_total_ != nullptr) {
+        this->s_positive_active_instant_power_total_->publish_state((size_t) positive_active_instant_power_total / 1000.00);
+      }
+
+      negative_active_energy_total = sml_data[95] << 24 | sml_data[96] << 16 | sml_data[97] << 8 | sml_data[98]; // [Wh]
       ESP_LOGI(TAG, "SML Data 2.8.0: %0.3fkWh", (size_t) negative_active_energy_total / 1000.00);
 
-      negative_active_energy_tariff1  = sml_data[108] << 24 | sml_data[109] << 16 | sml_data[110] << 8 | sml_data[111]; // [KWh]
+      if (this->s_negative_active_energy_total_ != nullptr) {
+        this->s_negative_active_energy_total_->publish_state((size_t) negative_active_energy_total / 1000.00);
+      }
+
+      negative_active_energy_tariff1  = sml_data[108] << 24 | sml_data[109] << 16 | sml_data[110] << 8 | sml_data[111]; // [Wh]
       ESP_LOGI(TAG, "SML Data 2.8.1: %0.3fkWh", (size_t) negative_active_energy_tariff1 / 1000.00);
 
-      negative_active_energy_tariff2 = sml_data[121] << 24 | sml_data[122] << 16 | sml_data[123] << 8 | sml_data[124]; // [KWh]
+      if (this->s_negative_active_energy_tariff1_ != nullptr) {
+        this->s_negative_active_energy_tariff1_->publish_state((size_t) negative_active_energy_tariff1 / 1000.00);
+      }
+
+      negative_active_energy_tariff2 = sml_data[121] << 24 | sml_data[122] << 16 | sml_data[123] << 8 | sml_data[124]; // [Wh]
       ESP_LOGI(TAG, "SML Data 2.8.2: %0.3fkWh", (size_t) negative_active_energy_tariff2 / 1000.00);
 
-      negative_active_instant_power_total = sml_data[134] << 24 | sml_data[135] << 16 | sml_data[136] << 8 | sml_data[137]; // [W]
-      ESP_LOGI(TAG, "SML Data 2.7.0: %iW", negative_active_instant_power_total);
+      if (this->s_negative_active_energy_tariff2_ != nullptr) {
+        this->s_negative_active_energy_tariff2_->publish_state((size_t) negative_active_energy_tariff2 / 1000.00);
+      }
 
-      positive_reactive_energy_total = sml_data[147] << 24 | sml_data[148] << 16 | sml_data[149] << 8 | sml_data[150]; // [kVArh]
+      negative_active_instant_power_total = sml_data[134] << 24 | sml_data[135] << 16 | sml_data[136] << 8 | sml_data[137]; // [W]
+      ESP_LOGI(TAG, "SML Data 2.7.0: %0.3fkW", (size_t) negative_active_instant_power_total / 1000.00);
+
+      if (this->s_negative_active_instant_power_total_ != nullptr) {
+        this->s_negative_active_instant_power_total_->publish_state((size_t) negative_active_instant_power_total / 1000.00);
+      }
+
+      positive_reactive_energy_total = sml_data[147] << 24 | sml_data[148] << 16 | sml_data[149] << 8 | sml_data[150]; // [VArh]
       ESP_LOGI(TAG, "SML Data 3.8.0: %0.3fkVArh", (size_t) positive_reactive_energy_total / 1000.00);
 
-      positive_reactive_energy_tariff1  = sml_data[160] << 24 | sml_data[161] << 16 | sml_data[162] << 8 | sml_data[163]; // [kVArh]
+      if (this->s_positive_reactive_energy_total_ != nullptr) {
+        this->s_positive_reactive_energy_total_->publish_state((size_t) positive_reactive_energy_total / 1000.00);
+      }
+
+      positive_reactive_energy_tariff1  = sml_data[160] << 24 | sml_data[161] << 16 | sml_data[162] << 8 | sml_data[163]; // [VArh]
       ESP_LOGI(TAG, "SML Data 3.8.1: %0.3fkVArh", (size_t) positive_reactive_energy_tariff1 / 1000.00);
 
-      positive_reactive_energy_tariff2 = sml_data[173] << 24 | sml_data[174] << 16 | sml_data[175] << 8 | sml_data[176]; // [kVArh]
+      if (this->s_positive_reactive_energy_tariff1_ != nullptr) {
+        this->s_positive_reactive_energy_tariff1_->publish_state((size_t) positive_reactive_energy_tariff1 / 1000.00);
+      }
+
+      positive_reactive_energy_tariff2 = sml_data[173] << 24 | sml_data[174] << 16 | sml_data[175] << 8 | sml_data[176]; // [VArh]
       ESP_LOGI(TAG, "SML Data 3.8.2: %0.3fkVArh", (size_t) positive_reactive_energy_tariff2 / 1000.00);
 
-      positive_reactive_instant_power_total = sml_data[186] << 24 | sml_data[187] << 16 | sml_data[188] << 8 | sml_data[189]; // [kVAr]
-      ESP_LOGI(TAG, "SML Data 3.7.0: %iVAr", positive_reactive_instant_power_total);
+      if (this->s_positive_reactive_energy_tariff2_ != nullptr) {
+        this->s_positive_reactive_energy_tariff2_->publish_state((size_t) positive_reactive_energy_tariff2 / 1000.00);
+      }
 
-      negative_reactive_energy_total = sml_data[199] << 24 | sml_data[200] << 16 | sml_data[201] << 8 | sml_data[202]; // [kVArh]
+      positive_reactive_instant_power_total = sml_data[186] << 24 | sml_data[187] << 16 | sml_data[188] << 8 | sml_data[189]; // [VAr]
+      ESP_LOGI(TAG, "SML Data 3.7.0: %0.3fkVAr", (size_t) positive_reactive_instant_power_total / 1000.00);
+
+      if (this->s_positive_reactive_instant_power_total_ != nullptr) {
+        this->s_positive_reactive_instant_power_total_->publish_state((size_t) positive_reactive_instant_power_total / 1000.00);
+      }
+
+      negative_reactive_energy_total = sml_data[199] << 24 | sml_data[200] << 16 | sml_data[201] << 8 | sml_data[202]; // [VArh]
       ESP_LOGI(TAG, "SML Data 4.8.0: %0.3fkVArh", (size_t) negative_reactive_energy_total / 1000.00);
 
-      negative_reactive_energy_tariff1  = sml_data[212] << 24 | sml_data[213] << 16 | sml_data[214] << 8 | sml_data[215]; // [kVArh]
+      if (this->s_negative_reactive_energy_total_ != nullptr) {
+        this->s_negative_reactive_energy_total_->publish_state((size_t) negative_reactive_energy_total / 1000.00);
+      }
+
+      negative_reactive_energy_tariff1  = sml_data[212] << 24 | sml_data[213] << 16 | sml_data[214] << 8 | sml_data[215]; // [VArh]
       ESP_LOGI(TAG, "SML Data 4.8.1: %0.3fkVArh", (size_t) negative_reactive_energy_tariff1 / 1000.00);
 
-      negative_reactive_energy_tariff2 = sml_data[225] << 24 | sml_data[226] << 16 | sml_data[227] << 8 | sml_data[228]; // [kVArh]
+      if (this->s_negative_reactive_energy_tariff1_ != nullptr) {
+        this->s_negative_reactive_energy_tariff1_->publish_state((size_t) negative_reactive_energy_tariff1 / 1000.00);
+      }
+
+      negative_reactive_energy_tariff2 = sml_data[225] << 24 | sml_data[226] << 16 | sml_data[227] << 8 | sml_data[228]; // [VArh]
       ESP_LOGI(TAG, "SML Data 4.8.2: %0.3fkVArh", (size_t) negative_reactive_energy_tariff2 / 1000.00);
 
-      negative_reactive_instant_power_total = sml_data[238] << 24 | sml_data[239] << 16 | sml_data[240] << 8 | sml_data[241]; // [kVAr]
-      ESP_LOGI(TAG, "SML Data 4.7.0: %iVAr", negative_reactive_instant_power_total);
+      if (this->s_negative_reactive_energy_tariff2_ != nullptr) {
+        this->s_negative_reactive_energy_tariff2_->publish_state((size_t) negative_reactive_energy_tariff2 / 1000.00);
+      }
+
+      negative_reactive_instant_power_total = sml_data[238] << 24 | sml_data[239] << 16 | sml_data[240] << 8 | sml_data[241]; // [VAr]
+      ESP_LOGI(TAG, "SML Data 4.7.0: %0.3fkVAr", (size_t) negative_reactive_instant_power_total / 1000.00);
+
+      if (this->s_negative_reactive_instant_power_total_ != nullptr) {
+        this->s_negative_reactive_instant_power_total_->publish_state((size_t) negative_reactive_instant_power_total / 1000.00);
+      }
     }
 
     bool Dlms::crc16_check(uint8_t *data, size_t data_size) {
