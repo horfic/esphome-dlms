@@ -254,14 +254,14 @@ namespace esphome {
       ESP_LOGI(TAG, "SML Data timestamp: %i-%i-%iT%i:%i:%iZ", Year, Month, Day, Hour, Minute, Second);
 
       if (this->s_timestamp_ != nullptr) {
-        this->s_timestamp_.publish_state(Year + "-" + Month + "-" + Day + "T" + Hour + ":" + Minute + ":" + Second + "Z")
+        this->s_timestamp_->publish_state(Year + "-" + Month + "-" + Day + "T" + Hour + ":" + Minute + ":" + Second + "Z")
       }
 
       positive_active_energy_total = sml_data[43] << 24 | sml_data[44] << 16 | sml_data[45] << 8 | sml_data[46]; // [KWh]
       ESP_LOGI(TAG, "SML Data 1.8.0: %0.3fkWh", (size_t) positive_active_energy_total / 1000.00);
 
       if (this->s_positive_active_energy_total_ != nullptr) {
-        this->s_positive_active_energy_total_.publish_state((size_t) positive_active_energy_total / 1000.00)
+        this->s_positive_active_energy_total_->publish_state((size_t) positive_active_energy_total / 1000.00)
       }
 
       positive_active_energy_tariff1  = sml_data[56] << 24 | sml_data[57] << 16 | sml_data[58] << 8 | sml_data[59]; // [KWh]
