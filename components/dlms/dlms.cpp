@@ -243,9 +243,9 @@ namespace esphome {
 
       //Idis system title
       //ESP_LOGI(TAG, "test: %s", format_hex_pretty(&iv[0], 12).c_str());
-      this->s_serial_number_->publish_state("test");
+      //this->s_serial_number_->publish_state("test");
       uint32_t serial_number;
-      serial_number = (apdu[5] & 0xf) << 24 | iv[6] << 16 | iv[7] << 8 | iv[8];
+      serial_number = (iv[4] & 0xf) << 24 | iv[4] << 16 | iv[5] << 8 | iv[7];
       ESP_LOGI(TAG, "SML Data serial numbers: %i", (size_t) serial_number);
       //uint32_t serial_number = (iv[4] & 0xf) << 24 | iv[5] << 16 | iv[6] << 8 | iv[7];
       //ESP_LOGI(TAG, "SML Data serial numberi: %i", serial_number);
