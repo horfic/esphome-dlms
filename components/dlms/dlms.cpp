@@ -280,10 +280,9 @@ namespace esphome {
       }
 
       //ToDo fix function type, not working again, guess is again conversion issue...
-      if (this->s_function_type_ != nullptr) {
+      /*if (this->s_function_type_ != nullptr) {
         //only for idis
         std::string function_type = "";
-        ESP_LOGI(TAG, "test");
 
         size_t function_type_int = iv[3] >> 4;
         bool function_type_add = false;
@@ -292,8 +291,6 @@ namespace esphome {
           function_type.append("Disconnector");
           function_type_add = true;
         }
-
-        ESP_LOGI(TAG, "test2");
 
         if ((function_type_int & 0x2) != 0) {
           if (function_type_add) {
@@ -304,8 +301,6 @@ namespace esphome {
           function_type_add = true;
         }
 
-        ESP_LOGI(TAG, "test3");
-
         if ((function_type_int & 0x4) != 0) {
           if (function_type_add) {
             function_type.append(", ");
@@ -314,11 +309,9 @@ namespace esphome {
           function_type.append("Multi Utility");
         }
 
-        ESP_LOGI(TAG, "test4");
-
         this->s_function_type_->publish_state(function_type);
         ESP_LOGI(TAG, "SML Data function type: %s", function_type.c_str());
-      }
+      }*/
 
       // Mapping
       uint16_t Year;
