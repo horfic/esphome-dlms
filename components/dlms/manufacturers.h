@@ -5,7 +5,7 @@
 
 namespace esphome {
   namespace dlms {
-    const std::map <std::string, std::string> manufacturers {
+    const std::map <std::string, std::string> MANUFACTURERS {
       {"LGZ", "Landis+Gyr AG"},
       {"SAG", "Sagemcom Energy & Telecom"}
     };
