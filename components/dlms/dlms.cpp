@@ -223,7 +223,7 @@ namespace esphome {
       ESP_LOGD(TAG, "Decrypted data: %s", format_hex_pretty(sml_data, sizeof(sml_data)).c_str());
 
 
-      char manufacturer_string [3];
+      /*char manufacturer_string [3];
       sprintf(manufacturer_string, "%c%c%c", iv[0], iv[1], iv[2]);
       auto manufacturer_lookup = MANUFACTURERS.find(manufacturer_string);
 
@@ -239,7 +239,7 @@ namespace esphome {
         if (this->s_manufacturer_ != nullptr) {
           this->s_manufacturer_->publish_state(manufacturer_string);
         }
-      }
+      }*/
 
       ESP_LOGI(TAG, "test: %s", format_hex_pretty(&iv[0], 12).c_str());
       this->s_serial_number_->publish_state("test");
