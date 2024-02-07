@@ -380,8 +380,6 @@ namespace esphome {
       if (this->s_negative_reactive_instant_power_total_ != nullptr) {
         this->s_negative_reactive_instant_power_total_->publish_state((size_t) negative_reactive_instant_power_total / 1000.00);
       }
-
-      this->status_clear_warning();
     }
 
     bool Dlms::crc16_check(uint8_t *data, size_t data_size) {
