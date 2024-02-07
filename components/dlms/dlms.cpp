@@ -282,7 +282,7 @@ namespace esphome {
         //only for idis
         std::string function_type = "";
 
-        uint8_t function_type_int = iv[3] >> 4;
+        size_t function_type_int = iv[3] >> 4;
         bool function_type_add = false;
 
         if ((function_type_int & 0x1) != 0) {
@@ -299,7 +299,7 @@ namespace esphome {
           function_type_add = true;
         }
 
-        if ((function_type_int & 0x3) != 0) {
+        if ((function_type_int & 0x4) != 0) {
           if (function_type_add) {
             function_type.append(", ");
           }
