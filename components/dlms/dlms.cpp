@@ -241,6 +241,7 @@ namespace esphome {
         }
       }*/
 
+      //Idis system title
       ESP_LOGI(TAG, "test: %s", format_hex_pretty(&iv[0], 12).c_str());
       this->s_serial_number_->publish_state("test");
       uint32_t serial_number = ((uint32_t) iv[4] & 0xf) << 24 | (uint32_t) iv[5] << 16 | (uint32_t) iv[6] << 8 | (uint32_t) iv[7];
