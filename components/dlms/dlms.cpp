@@ -225,10 +225,10 @@ namespace esphome {
 
       char manufacturer_string [3];
       sprintf(manufacturer_string, "%c%c%c", iv[0], iv[1], iv[2]);
-      ESP_LOGI(TAG, "SML Data manufacturer: %s", MANUFACTURERS.find(manufacturer_string));
+      ESP_LOGI(TAG, "SML Data manufacturer: %s", MANUFACTURERS.find(manufacturer_string).c_str());
 
       if (this->s_manufacturer_ != nullptr) {
-        this->s_manufacturer_->publish_state(MANUFACTURERS.find(manufacturer_string));
+        this->s_manufacturer_->publish_state(MANUFACTURERS.find(manufacturer_string).c_str());
       }
 
       // Mapping
