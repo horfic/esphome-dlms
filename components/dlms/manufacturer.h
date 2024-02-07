@@ -1,8 +1,10 @@
 #pragma once
 
+#include <map>
+
 namespace esphome {
   namespace dlms {
-    const map<string, string> manufacturers {
+    const std::map <string, string> manufacturers {
       {"LGZ", "Landis+Gyr AG"},
       {"SAG", "Sagemcom Energy & Telecom"}
     };
