@@ -45,7 +45,7 @@ namespace esphome {
             this->reset_apdu();
             continue;
           } else {
-            this->apdu_offset_ = 20;
+            this->apdu_offset_ = this->frame_bytes_read_ + 1;
             this->frames_read_ = 1;
           }
         }
