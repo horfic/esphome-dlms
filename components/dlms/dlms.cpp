@@ -245,6 +245,7 @@ namespace esphome {
       if (this->s_serial_number_ != nullptr) {
         char serial_number_string [16];
         sprintf(serial_number_string, "%d", serial_number);
+        ESP_LOGI(TAG, "SML Data serial number: %s", serial_number_string);
         this->s_serial_number_->publish_state(serial_number_string);
       }
 
