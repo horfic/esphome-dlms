@@ -287,20 +287,20 @@ namespace esphome {
 
         if ((function_type_int & 0x1) != 0) {
           function_type = "Disconnector";
-          add = true;
+          function_type_add = true;
         }
 
         if ((function_type_int & 0x2) != 0) {
-          if (add) {
+          if (function_type_add) {
             function_type.append(", ");
           }
 
           function_type.append("Load Management");
-          add = true;
+          function_type_add = true;
         }
 
         if ((function_type_int & 0x3) != 0) {
-          if (add) {
+          if (function_type_add) {
             function_type.append(", ");
           }
 
