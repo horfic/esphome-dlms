@@ -17,11 +17,6 @@ namespace esphome {
       #define HDLC_CRC16_INIT 0xffff
       #define HDLC_CRC16_XOR 0xffff
 
-      #if !defined(DSMR_SENSOR_LIST) && !defined(DSMR_TEXT_SENSOR_LIST)
-      // Neither set, set it to a dummy value to not break build
-      #define DSMR_TEXT_SENSOR_LIST(F, SEP) F(identification)
-      #endif
-
       #ifndef DSMR_SENSOR_LIST
       #define DSMR_SENSOR_LIST(F, SEP)
       #endif
