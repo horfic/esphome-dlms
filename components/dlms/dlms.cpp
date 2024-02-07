@@ -151,6 +151,12 @@ namespace esphome {
 
     void Dlms::dump_config() {
       ESP_LOGCONFIG(TAG, "DLMS:");
+
+      #define DLMS_LOG_SENSOR(s) LOG_SENSOR("  ", #s, this->s_##s##_);
+        DLMS_SENSOR_LIST(DLMS_LOG_SENSOR, )
+
+      #define DLMS_LOG_TEXT_SENSOR(s) LOG_TEXT_SENSOR("  ", #s, this->s_##s##_);
+        DLMS_TEXT_SENSOR_LIST(DLMS_LOG_TEXT_SENSOR, )
     }
 
     void Dlms::reset_apdu() {
