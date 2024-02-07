@@ -286,7 +286,7 @@ namespace esphome {
         bool function_type_add = false;
 
         if ((function_type_int & 0x1) != 0) {
-          function_type = "Disconnector";
+          function_type.append("Disconnector");
           function_type_add = true;
         }
 
