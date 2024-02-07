@@ -223,7 +223,7 @@ namespace esphome {
       ESP_LOGD(TAG, "Decrypted data: %s", format_hex_pretty(sml_data, sizeof(sml_data)).c_str());
 
 
-      /*char manufacturer_string [3];
+      char manufacturer_string [3];
       sprintf(manufacturer_string, "%c%c%c", iv[0], iv[1], iv[2]);
       auto manufacturer_lookup = MANUFACTURERS.find(manufacturer_string);
 
@@ -239,15 +239,14 @@ namespace esphome {
         if (this->s_manufacturer_ != nullptr) {
           this->s_manufacturer_->publish_state(manufacturer_string);
         }
-      }*/
+      }
 
       //Idis system title
-      ESP_LOGI(TAG, "test: %s", format_hex_pretty(&iv[0], 12).c_str());
-      //this->s_serial_number_->publish_state("test");
-      uint32_t serial_number = (iv[4] & 0xf) << 24 | iv[5] << 16 | iv[6] << 8 | iv[7];
-      char serial_number_string [32];
-      sprintf(serial_number_string, "%s", serial_number);
-      ESP_LOGI(TAG, "SML Data serial numbers: %d", serial_number);
+      //ESP_LOGI(TAG, "test: %s", format_hex_pretty(&iv[0], 12).c_str());
+      this->s_serial_number_->publish_state("test");
+      uint32_t serial_number;
+      serial_number = (apdu[5] & 0xf) << 24 | iv[6] << 16 | iv[7] << 8 | iv[8];
+      ESP_LOGI(TAG, "SML Data serial numbers: %i", (size_t) serial_number);
       //uint32_t serial_number = (iv[4] & 0xf) << 24 | iv[5] << 16 | iv[6] << 8 | iv[7];
       //ESP_LOGI(TAG, "SML Data serial numberi: %i", serial_number);
       //ESP_LOGI(TAG, "SML Data serial numberd: %d", serial_number);
@@ -290,13 +289,13 @@ namespace esphome {
       Minute = sml_data[28];
       Second = sml_data[29];
 
-      /*char timestamp_string [22];
+      char timestamp_string [22];
       sprintf(timestamp_string, "%i-%02d-%02dT%02d:%02d:%02dZ", Year, Month, Day, Hour, Minute, Second);
       ESP_LOGI(TAG, "SML Data timestamp: %s", timestamp_string);
 
       if (this->s_timestamp_ != nullptr) {
         this->s_timestamp_->publish_state(timestamp_string);
-      }*/
+      }
 
       positive_active_energy_total = sml_data[43] << 24 | sml_data[44] << 16 | sml_data[45] << 8 | sml_data[46]; // [Wh]
       ESP_LOGI(TAG, "SML Data 1.8.0: %0.3fkWh", (size_t) positive_active_energy_total / 1000.00);
