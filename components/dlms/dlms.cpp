@@ -257,7 +257,7 @@ namespace esphome {
       Hour = sml_data[27];
       Minute = sml_data[28];
       Second = sml_data[29];
-      ESP_LOGI(TAG, "SML Data timestamp: %i-%02d-%02dT%02d:%02d:%02dZ", Year, Month, Day, Hour, Minute, Second);
+      ESP_LOGI(TAG, "SML Data timestamp: %i-%i-%iT%i:%i:%iZ", Year, Month, Day, Hour, Minute, Second);
 
       if (this->s_timestamp_ != nullptr) {
         char timestamp_string [20];
