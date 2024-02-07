@@ -242,6 +242,7 @@ namespace esphome {
       }
 
       uint32_t serial_number = (iv[3] & 0xF) << 24 | iv[4] << 16 | iv[5] << 8 | iv[6];
+      ESP_LOGI(TAG, "SML Data serial number: %d", serial_number);
       //if (this->s_serial_number_ != nullptr) {
         char serial_number_string [16];
         sprintf(serial_number_string, "%d", serial_number);
