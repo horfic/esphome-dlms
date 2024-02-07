@@ -242,10 +242,12 @@ namespace esphome {
       }*/
 
       //Idis system title
-      //ESP_LOGI(TAG, "test: %s", format_hex_pretty(&iv[0], 12).c_str());
+      ESP_LOGI(TAG, "test: %s", format_hex_pretty(&iv[0], 12).c_str());
       //this->s_serial_number_->publish_state("test");
-      //uint32_t serial_number = (iv[4] & 0xf) << 24 | iv[5] << 16 | iv[6] << 8 | iv[7];
-      //ESP_LOGI(TAG, "SML Data serial numbers: %d", serial_number);
+      uint32_t serial_number = (iv[4] & 0xf) << 24 | iv[5] << 16 | iv[6] << 8 | iv[7];
+      char serial_number_string [32];
+      sprintf(serial_number_string, "%s", serial_number);
+      ESP_LOGI(TAG, "SML Data serial numbers: %d", serial_number);
       //uint32_t serial_number = (iv[4] & 0xf) << 24 | iv[5] << 16 | iv[6] << 8 | iv[7];
       //ESP_LOGI(TAG, "SML Data serial numberi: %i", serial_number);
       //ESP_LOGI(TAG, "SML Data serial numberd: %d", serial_number);
