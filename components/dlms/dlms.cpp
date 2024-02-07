@@ -228,7 +228,7 @@ namespace esphome {
       ESP_LOGI(TAG, "SML Data manufacturer: %s", MANUFACTURERS.find("LGZ"));
 
       if (this->s_manufacturer_ != nullptr) {
-        this->s_manufacturer_->publish_state(MANUFACTURERS.find("LGZ"));
+        //this->s_manufacturer_->publish_state(MANUFACTURERS.find("LGZ"));
       }
 
       // Mapping
