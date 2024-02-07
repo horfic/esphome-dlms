@@ -246,7 +246,10 @@ namespace esphome {
         uint32_t serial_number;
         serial_number = (iv[4] & 0xf) << 24 | iv[5] << 16 | iv[6] << 8 | iv[7];
         ESP_LOGI(TAG, "SML Data serial numbers: %i", (size_t) serial_number);
-        this->s_serial_number_->publish_state((size_t) serial_number);
+
+        char serial_number_string [16];
+        sprintf(serial_number, "%i", (size_t) serial_number);
+        this->s_serial_number_->publish_state(serial_number_string);
       }
 
       // Mapping
