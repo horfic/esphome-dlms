@@ -226,10 +226,19 @@ namespace esphome {
       char manufacturer_string [3];
       sprintf(manufacturer_string, "%c%c%c", iv[0], iv[1], iv[2]);
       auto manufacturer_lookup = MANUFACTURERS.find(manufacturer_string);
-      ESP_LOGI(TAG, "SML Data manufacturer: %s", manufacturer_lookup->second.c_str());
 
-      if (this->s_manufacturer_ != nullptr) {
-        //this->s_manufacturer_->publish_state(MANUFACTURERS.find("LGZ"));
+      if (manufacturer_lookup != MANUFACTURERS.end()) {
+        ESP_LOGI(TAG, "SML Data manufacturer: %s", manufacturer_lookup->second.c_str());
+
+        if (this->s_manufacturer_ != nullptr) {
+          this->s_manufacturer_->publish_state(manufacturer_lookup->second.c_str());
+        }
+      } else {
+        ESP_LOGI(TAG, "SML Data manufacturer: %s", manufacturer_string);
+
+        if (this->s_manufacturer_ != nullptr) {
+          this->s_manufacturer_->publish_state(manufacturer_string);
+        }
       }
 
       // Mapping
