@@ -241,22 +241,13 @@ namespace esphome {
         }
       }
 
-      //Idis system title
-      ESP_LOGI(TAG, "test: %s", format_hex_pretty(&iv[0], 12).c_str());
-      //this->s_serial_number_->publish_state("test");
-      uint32_t serial_number;
-      serial_number = (iv[4] & 0xf) << 24 | iv[5] << 16 | iv[6] << 8 | iv[7];
-      ESP_LOGI(TAG, "SML Data serial numbers: %i", (size_t) serial_number);
-      //uint32_t serial_number = (iv[4] & 0xf) << 24 | iv[5] << 16 | iv[6] << 8 | iv[7];
-      //ESP_LOGI(TAG, "SML Data serial numberi: %i", serial_number);
-      //ESP_LOGI(TAG, "SML Data serial numberd: %d", serial_number);
-
-      //if (this->s_serial_number_ != nullptr) {
-        //char serial_number_string [16];
-        //sprintf(serial_number_string, "%d", serial_number);
-        //ESP_LOGI(TAG, "SML Data serial number: %s", serial_number_string);
-        //this->s_serial_number_->publish_state(serial_number_string);
-      //}
+      if (this->s_serial_number_ != nullptr) {
+        //Idis system title
+        uint32_t serial_number;
+        serial_number = (iv[4] & 0xf) << 24 | iv[5] << 16 | iv[6] << 8 | iv[7];
+        ESP_LOGI(TAG, "SML Data serial numbers: %i", (size_t) serial_number);
+        this->s_serial_number_->publish_state((size_t) serial_number);
+      }
 
       // Mapping
       uint16_t Year;
