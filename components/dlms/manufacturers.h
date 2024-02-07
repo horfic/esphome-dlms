@@ -356,7 +356,7 @@ namespace esphome {
       {"EKO", "EKOLIS"},
       {"EKS", "DİCLE KÖK ENERJİ YATIRIM A.Ş"},
       {"EKT", "PA KVANT J.S."},
-      {"ELC", "CJSC " EMIS ""},
+      {"ELC", "CJSC \" EMIS \""},
       {"ELD", "Elektromed Elektronik Ltd"},
       {"ELE", "Elster Electricity LLC"},
       {"ELG", "Elgas s.r.o."},
