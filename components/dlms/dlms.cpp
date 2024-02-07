@@ -248,7 +248,7 @@ namespace esphome {
         ESP_LOGI(TAG, "SML Data serial numbers: %i", (size_t) serial_number);
 
         char serial_number_string [16];
-        sprintf(serial_number, "%i", (size_t) serial_number);
+        sprintf(serial_number_string, "%i", (size_t) serial_number);
         this->s_serial_number_->publish_state(serial_number_string);
       }
 
