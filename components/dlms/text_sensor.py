@@ -12,6 +12,7 @@ CONFIG_SCHEMA = cv.Schema(
         cv.Optional("manufacturer"): text_sensor.text_sensor_schema(),
         cv.Optional("serial_number"): text_sensor.text_sensor_schema(),
         cv.Optional("device_type"): text_sensor.text_sensor_schema(),
+        cv.Optional("function_type"): text_sensor.text_sensor_schema(),
         cv.Optional("timestamp"): text_sensor.text_sensor_schema(),
     }
 ).extend(cv.COMPONENT_SCHEMA)

@@ -255,6 +255,7 @@ namespace esphome {
       if (this->s_device_type_ != nullptr) {
         //only for idis
         std::string device_type = "unknown";
+
         switch (iv[3]) {
           case 0x63:
             device_type = "DC";
@@ -275,6 +276,39 @@ namespace esphome {
 
         this->s_device_type_->publish_state(device_type);
         ESP_LOGI(TAG, "SML Data device type: %s", device_type.c_str());
+      }
+
+      if (this->s_function_type_ != nullptr) {
+        //only for idis
+        std::string function_type = "";
+
+        uint8_t function_type_int = iv[3] >> 4;
+        bool function_type_add = false;
+
+        if ((function_type_int & 0x1) != 0) {
+          function_type = "Disconnector";
+          add = true;
+        }
+
+        if ((function_type_int & 0x2) != 0) {
+          if (add) {
+            function_type.append(", ");
+          }
+
+          function_type.append("Load Management");
+          add = true;
+        }
+
+        if ((function_type_int & 0x3) != 0) {
+          if (add) {
+            function_type.append(", ");
+          }
+
+          function_type.append("Multi Utility");
+        }
+
+        this->s_function_type_->publish_state(function_type);
+        ESP_LOGI(TAG, "SML Data function type: %s", function_type.c_str());
       }
 
       // Mapping
