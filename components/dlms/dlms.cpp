@@ -254,24 +254,23 @@ namespace esphome {
 
       if (this->s_device_type_ != nullptr) {
         //only for idis
+        char device_type[40] = "unknown";
         switch (iv[3]) {
           case 0x63:
-            char device_type[] = "DC";
+            device_type[40] = "DC";
             break;
           case 0x64:
-            char device_type[] = "IDIS package1 PLC single phase meter";
+            device_type[40] = "IDIS package1 PLC single phase meter";
             break;
           case 0x65:
-            char device_type[] = "IDIS package1 PLC polyphase phase meter";
+            device_type[40] = "IDIS package1 PLC polyphase phase meter";
             break;
           case 0x66:
-            char device_type[] = "IDIS package2 IP single phase meter";
+            device_type[40] = "IDIS package2 IP single phase meter";
             break;
           case 0x67:
-            char device_type[] = "IDIS package2 IP polyphase meter";
+            device_type[40] = "IDIS package2 IP polyphase meter";
             break;
-          default:
-            char device_type[] = "unknown"
         }
 
         this->s_device_type_->publish_state(device_type);
