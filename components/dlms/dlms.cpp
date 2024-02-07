@@ -221,9 +221,12 @@ namespace esphome {
       ESP_LOGD(TAG, "Crypt data: %s", format_hex_pretty(&apdu[17], this->apdu_length_ - 17).c_str());
       ESP_LOGD(TAG, "Decrypted data: %s", format_hex_pretty(sml_data, sizeof(sml_data)).c_str());
 
+
+      char manufacturer_string [3];
+      sprintf(manufacturer_string, "%c%c%c", iv[0], iv[1], iv[2]);
+      ESP_LOGI(TAG, "SML Data manufacturer: %s", manufacturer_string);
+
       if (this->s_manufacturer_ != nullptr) {
-        char manufacturer_string [3];
-        sprintf(manufacturer_string, "%c%c%c", iv[0], iv[1], iv[2]);
         this->s_manufacturer_->publish_state(manufacturer_string);
       }
 
@@ -257,11 +260,12 @@ namespace esphome {
       Hour = sml_data[27];
       Minute = sml_data[28];
       Second = sml_data[29];
-      //ESP_LOGI(TAG, "SML Data timestamp: %i-%i-%iT%i:%i:%iZ", Year, Month, Day, Hour, Minute, Second);
+
+      char timestamp_string [22];
+      sprintf(timestamp_string, "%i-%02d-%02dT%02d:%02d:%02dZ", Year, Month, Day, Hour, Minute, Second);
+      ESP_LOGI(TAG, "SML Data timestamp: %s", timestamp_string);
 
       if (this->s_timestamp_ != nullptr) {
-        char timestamp_string [22];
-        sprintf(timestamp_string, "%i-%02d-%02dT%02d:%02d:%02dZ", Year, Month, Day, Hour, Minute, Second);
         this->s_timestamp_->publish_state(timestamp_string);
       }
 
