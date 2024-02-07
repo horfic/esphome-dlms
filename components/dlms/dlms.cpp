@@ -254,27 +254,27 @@ namespace esphome {
 
       if (this->s_device_type_ != nullptr) {
         //only for idis
-        char device_type[40] = "unknown";
+        std::string device_type = "unknown";
         switch (iv[3]) {
           case 0x63:
-            device_type[40] = "DC";
+            device_type = "DC";
             break;
           case 0x64:
-            device_type[40] = "IDIS package1 PLC single phase meter";
+            device_type = "IDIS package1 PLC single phase meter";
             break;
           case 0x65:
-            device_type[40] = "IDIS package1 PLC polyphase phase meter";
+            device_type = "IDIS package1 PLC polyphase phase meter";
             break;
           case 0x66:
-            device_type[40] = "IDIS package2 IP single phase meter";
+            device_type = "IDIS package2 IP single phase meter";
             break;
           case 0x67:
-            device_type[40] = "IDIS package2 IP polyphase meter";
+            device_type = "IDIS package2 IP polyphase meter";
             break;
         }
 
         this->s_device_type_->publish_state(device_type);
-        ESP_LOGI(TAG, "SML Data device type: %s", device_type);
+        ESP_LOGI(TAG, "SML Data device type: %s", device_type.c_str());
       }
 
       // Mapping
