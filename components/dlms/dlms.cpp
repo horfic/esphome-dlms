@@ -278,7 +278,7 @@ namespace esphome {
         ESP_LOGI(TAG, "SML Data device type: %s", device_type.c_str());
       }
 
-      if (this->s_function_type_ != nullptr) {
+      //if (this->s_function_type_ != nullptr) {
         //only for idis
         std::string function_type = "";
 
@@ -309,7 +309,7 @@ namespace esphome {
 
         this->s_function_type_->publish_state(function_type);
         ESP_LOGI(TAG, "SML Data function type: %s", function_type.c_str());
-      }
+      //}
 
       // Mapping
       uint16_t Year;
