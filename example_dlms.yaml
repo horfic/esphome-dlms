@@ -1,5 +1,52 @@
+uart:
+  tx_pin: GPIO1
+  rx_pin: GPIO3
+  baud_rate: 2400
+  rx_buffer_size: 1024
+  parity: even
+
 dlms:
-  data_link_layer: "hdlc" # should also support 62056-21 mode e, mbus, 62056-4-7 (tcp/ip)
-  decryption_key: "" # global unicast encryption key, if empty no auth should be performed
-  auth_key: "" # global authentication key
+  decryption_key: "" # global unicast encryption key
+  auth_key: "" # global authentication key, if empty no auth should be performed
   
+sensor:
+  - platform: dlms
+    positive_active_energy_total:
+      name: "Postive active energy total"
+    positive_active_energy_tariff1:
+      name: "Postive active energy tariff 1"
+    positive_active_energy_tariff2:
+      name: "Postive active energy tariff 2"
+    positive_active_instant_power_total:
+      name: "Postive active instant power total"
+    negative_active_energy_total:
+      name: "Negative active energy total"
+    negative_active_energy_tariff1:
+      name: "Negative active energy tariff 1"
+    negative_active_energy_tariff2:
+      name: "Negative active energy tariff 2"
+    negative_active_instant_power_total:
+      name: "Negative active instant power total"
+    positive_reactive_energy_total:
+      name: "Postive reactive energy total"
+    positive_reactive_energy_tariff1:
+      name: "Postive reactive energy tariff 1"
+    positive_reactive_energy_tariff2:
+      name: "Postive reactive energy tariff 2"
+    positive_reactive_instant_power_total:
+      name: "Postive reactive instant power total"
+    negative_reactive_energy_total:
+      name: "Negative reactive energy total"
+    negative_reactive_energy_tariff1:
+      name: "Negative reactive energy tariff 1"
+    negative_reactive_energy_tariff2:
+      name: "Negative reactive energy tariff 2"
+    negative_reactive_instant_power_total:
+      name: "Negative reactive instant power total"
+
+text_sensor:
+  - platform: dlms
+    timestamp:
+      name: "DateTime"
+    manufacturer:
+      name: "Manufacturer"

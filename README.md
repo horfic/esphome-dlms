@@ -1,47 +1,16 @@
-# esphome-dlms
+# ESPHome Component for DLMS/Cosem communication
 
+This component was tested on a Landis Gyr E450 3phase from provider Stromnetz Graz per MBus cable
 
+## Hardware used
 
+* ESP32 boar - e.g. https://www.az-delivery.de/en/products/esp32-d1-mini
+* TTL to mbus slave module - e.g. https://de.aliexpress.com/item/1005006061845039.html
 
-cipher text startet bei 38 bei insgesamt 139 bytes ohne start/end flag
-da aes_128 nur zu 16 bytes codieren kann wäre es möglich das er nur 96 bytes nimmer
+## Helpful links
 
-aes möglicherweise cipher text ab 38 bis -3 ohne end flag am ende des buffers
-
-
-
-
-https://github.com/aburgr/smartmeter-reader/blob/main/decode.py#L48
-
-Cosem information
+DLMS/Cosem information
 https://web.archive.org/web/20170921113529/http://dlms.com/documents/archive/Excerpt_BB10.pdf
 
-Manufacturer list
+Manufacturer list (Last updated: 2024-02-05 17:58)
 https://www.dlms.com/flag-id-directory/
-
-forum
---------------------
-000	start flag
-001-013	hdcl header
-014-021	system title
-023	security byte
-024-027	frame counter
-028-096 cipher text
-097-108	gcm tag
-109-110	crc checksum
-111	end flag
-
-
-self
---------------------
-001	start flag
-002-021	hdlc header
-022-029 system title
-030
-031-032
-033	security byte
-034-037	frame counter
-038-126	cipher text
-127-138	gcm tag?
-139-140	crc checksum
-141	end flag
