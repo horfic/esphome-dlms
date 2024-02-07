@@ -243,11 +243,10 @@ namespace esphome {
 
       ESP_LOGI(TAG, "test: %s", format_hex_pretty(&iv[0], 12).c_str());
       this->s_serial_number_->publish_state("test");
-      uint32_t serial_number;
-      serial_number = ((uint32_t) iv[4] & 0xff) << 24 | (uint32_t) iv[5] << 16 | (uint32_t) iv[6] << 8 | (uint32_t) iv[7];
+      uint32_t serial_number = ((uint32_t) iv[4] & 0xff) << 24 | (uint32_t) iv[5] << 16 | (uint32_t) iv[6] << 8 | (uint32_t) iv[7];
       //ESP_LOGI(TAG, "SML Data serial numberi: %i", serial_number);
       //ESP_LOGI(TAG, "SML Data serial numberd: %d", serial_number);
-      ESP_LOGI(TAG, "SML Data serial numbers: %s", serial_number);
+      ESP_LOGI(TAG, "SML Data serial numbers: %d", serial_number);
       //if (this->s_serial_number_ != nullptr) {
         //char serial_number_string [16];
         //sprintf(serial_number_string, "%d", serial_number);
