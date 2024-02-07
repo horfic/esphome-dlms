@@ -261,7 +261,7 @@ namespace esphome {
 
       if (this->s_timestamp_ != nullptr) {
         char timestamp_string [20];
-        sprintf(timestamp_string, "%i-%d-%dT%02d:%d:%dZ", Year, Month, Day, Hour, Minute, Second);
+        sprintf(timestamp_string, "%i-%d-%dT%02d:%02d:%02dZ", Year, Month, Day, Hour, Minute, Second);
         this->s_timestamp_->publish_state(timestamp_string);
       }
 
