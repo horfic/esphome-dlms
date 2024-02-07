@@ -241,7 +241,7 @@ namespace esphome {
         }
       }
 
-      uint32_t serial_number = (iv[3] & 0xF) << 24 | iv[4] << 16 | iv[5] << 8 | iv[6]
+      uint32_t serial_number = (iv[3] & 0xF) << 24 | iv[4] << 16 | iv[5] << 8 | iv[6];
       if (this->s_serial_number_ != nullptr) {
         this->s_serial_number_->publish_state(serial_number);
       }
