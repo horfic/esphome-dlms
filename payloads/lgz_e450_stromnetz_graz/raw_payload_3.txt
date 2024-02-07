@@ -8,11 +8,11 @@ FF.................destination address field
 86.................crc16 header checksum
 F8.................crc16 header checksum
 E0.................service type (llc information parameter n*bits)
-C0.................long invoke-id and priority (llc information parameter)  (more frames expected with 40?), last frame with C0?
-00.................possible still llc information?
-03.................possible still llc information? possible counter of additional package?
-00.................possible still llc information?
-00.................possible still llc information?
+C0.................block control  (more frames expected with 40?), last frame with C0?
+00.................block number, 0003
+03.................block number, 0003
+00.................block number ack, 0000
+00.................block number ack, 0000
 1F.................possible still llc information?
 A4.................encrypted data
 D0.................encrypted data

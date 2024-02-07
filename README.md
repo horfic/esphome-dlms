@@ -14,3 +14,5 @@ https://web.archive.org/web/20170921113529/http://dlms.com/documents/archive/Exc
 
 Manufacturer list (Last updated: 2024-02-05 17:58)
 https://www.dlms.com/flag-id-directory/
+
+https://github.com/UtilitechAS/amsreader-firmware
