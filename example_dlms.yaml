@@ -55,3 +55,9 @@ text_sensor:
       name: "DateTime"
     manufacturer:
       name: "Manufacturer"
+    serial_number:
+      name: "Serial number"
+    device_type:
+      name: "Device type"
+    function_type:
+      name: "Function type"
