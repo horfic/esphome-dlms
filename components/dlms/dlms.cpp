@@ -260,9 +260,9 @@ namespace esphome {
       //ESP_LOGI(TAG, "SML Data timestamp: %i-%i-%iT%i:%i:%iZ", Year, Month, Day, Hour, Minute, Second);
 
       if (this->s_timestamp_ != nullptr) {
-        //char timestamp_string [20];
-        //sprintf(timestamp_string, "%i-%02d-%02dT%02d:%02d:%02dZ", Year, Month, Day, Hour, Minute, Second);
-        //this->s_timestamp_->publish_state(timestamp_string);
+        char timestamp_string [20];
+        sprintf(timestamp_string, "%i-%d-%dT%d:%d:%dZ", Year, Month, Day, Hour, Minute, Second);
+        this->s_timestamp_->publish_state(timestamp_string);
       }
 
       positive_active_energy_total = sml_data[43] << 24 | sml_data[44] << 16 | sml_data[45] << 8 | sml_data[46]; // [Wh]
