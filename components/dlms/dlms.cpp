@@ -228,9 +228,9 @@ namespace esphome {
       ESP_LOGD(TAG, "Decrypted data: %s", format_hex_pretty(sml_data, sizeof(sml_data)).c_str());
 
       if (this->s_manufacturer_ != nullptr) {
-        char manufacturer_string [3];
-        sprintf(manufacturer_string, "%c%c%c", iv[0], iv[1], iv[2]);
-        this->s_manufacturer_->publish_state(manufacturer_string);
+        //char manufacturer_string [3];
+        //sprintf(manufacturer_string, "%c%c%c", iv[0], iv[1], iv[2]);
+        //this->s_manufacturer_->publish_state(manufacturer_string);
       }
 
       // Mapping
