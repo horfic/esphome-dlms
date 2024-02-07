@@ -1,4 +1,5 @@
 #include "dlms.h"
+#include "manufacturer.h"
 #include "esphome/core/log.h"
 #include "esphome/core/helpers.h"
 

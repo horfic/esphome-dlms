@@ -74,5 +74,5 @@ namespace esphome {
           #define DLMS_DECLARE_TEXT_SENSOR(s) text_sensor::TextSensor *s_##s##_{nullptr};
             DLMS_TEXT_SENSOR_LIST(DLMS_DECLARE_TEXT_SENSOR, )
       };
-  }  // namespace dsmr
+  }  // namespace dlms
 }  // namespace esphome
