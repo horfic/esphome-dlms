@@ -22,7 +22,7 @@ DB.................startbyte for aes128-gcm
 4C.................L (string), system title
 47.................G (string), system title
 5A.................Z (string), system title
-67.................g (string) 103 (dec)
+67.................g (string) 103 (dec), device type
 73.................s (string) 115 (dec), system title, possible some bit shifting to get the serial number 56480681
 5D.................] (string) 93 (dec), system title, possible some bit shifting to get the serial number 56480681
 D3.................Ó (string) 211 (dec), system title, possible some bit shifting to get the serial number 56480681

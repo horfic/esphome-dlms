@@ -254,7 +254,7 @@ namespace esphome {
 
       if (this->s_device_type_ != nullptr) {
         //only for idis
-        device_type;
+        char device_type[40];
         switch (iv[3]) {
           case 0x63:
             device_type = "DC";
