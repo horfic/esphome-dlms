@@ -222,7 +222,9 @@ namespace esphome {
       ESP_LOGD(TAG, "Decrypted data: %s", format_hex_pretty(sml_data, sizeof(sml_data)).c_str());
 
       if (this->s_manufacturer_ != nullptr) {
-        this->s_manufacturer_->publish_state(std::to_string(iv[0]) + std::to_string(iv[1]) + std::to_string(iv[2]));
+        char manufacturer_string [3];
+        sprintf(manufacturer_string, "%c%c%c", iv[0], iv[1], iv[2]);
+        this->s_manufacturer_->publish_state(manufacturer_string);
       }
 
       // Mapping
@@ -255,7 +257,7 @@ namespace esphome {
       Hour = sml_data[27];
       Minute = sml_data[28];
       Second = sml_data[29];
-      ESP_LOGI(TAG, "SML Data timestamp: %i-%i-%iT%i:%i:%iZ", Year, Month, Day, Hour, Minute, Second);
+      ESP_LOGI(TAG, "SML Data timestamp: %i-%02d-%02dT%02d:%02d:%02dZ", Year, Month, Day, Hour, Minute, Second);
 
       if (this->s_timestamp_ != nullptr) {
         char timestamp_string [20];
