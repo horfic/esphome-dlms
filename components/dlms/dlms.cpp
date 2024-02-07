@@ -242,7 +242,7 @@ namespace esphome {
       }
 
       if (this->s_serial_number_ != nullptr) {
-        //Idis system title
+        //only for idis
         uint32_t serial_number;
         serial_number = (iv[4] & 0xf) << 24 | iv[5] << 16 | iv[6] << 8 | iv[7];
         ESP_LOGI(TAG, "SML Data serial numbers: %i", (size_t) serial_number);
@@ -250,6 +250,31 @@ namespace esphome {
         char serial_number_string [16];
         sprintf(serial_number_string, "%i", (size_t) serial_number);
         this->s_serial_number_->publish_state(serial_number_string);
+      }
+
+      if (this->s_device_type_ != nullptr) {
+        //only for idis
+        device_type;
+        switch (iv[3]) {
+          case 0x63:
+            device_type = "DC";
+            break;
+          case 0x64:
+            device_type = "IDIS package1 PLC single phase meter";
+            break;
+          case 0x65:
+            device_type = "IDIS package1 PLC polyphase phase meter";
+            break;
+          case 0x66:
+            device_type = "IDIS package2 IP single phase meter";
+            break;
+          case 0x67:
+            device_type = "IDIS package2 IP polyphase meter";
+            break;
+        }
+
+        this->s_device_type_->publish_state(device_type);
+        ESP_LOGI(TAG, "SML Data device type: %s", device_type);
       }
 
       // Mapping
