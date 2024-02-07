@@ -241,7 +241,7 @@ namespace esphome {
         }
       }
 
-      uint32_t serial_number = (iv[3] & 0xF) << 24 | iv[4] << 16 | iv[5] << 8 | iv[6];
+      size_t serial_number = (iv[4] & 0xF) << 24 | iv[5] << 16 | iv[6] << 8 | iv[7];
       ESP_LOGI(TAG, "SML Data serial numberi: %i", serial_number);
       ESP_LOGI(TAG, "SML Data serial numberd: %d", serial_number);
       ESP_LOGI(TAG, "SML Data serial numbers: %s", serial_number);
