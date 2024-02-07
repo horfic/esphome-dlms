@@ -1,3 +1,8 @@
+external_components:
+  - source: github://horfic/esphome-dlms
+    components: [ dlms ]
+    refresh: 0s
+
 uart:
   tx_pin: GPIO1
   rx_pin: GPIO3
