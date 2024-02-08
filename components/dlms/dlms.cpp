@@ -385,7 +385,7 @@ namespace esphome {
 
       if(isalpha(iv[0]) == 0 || isalpha(iv[1]) == 0 || isalpha(iv[2]) == 0) {
         // UNI/TS 11291-11-2 (Italy) standard - https://uni.com
-        ESP_LOGI(TAG, "SML Data UNI");
+        ESP_LOGI(TAG, "SML Data UNI DLMS standard");
         uint16_t manufacturer_uni_int = (uint16_t) (iv[0] << 8 | iv[1]);
 
         uint16_t manufacturer_uni_tmp_int = (uint16_t) (manufacturer_uni_int >> 8 | manufacturer_uni_int << 8);
@@ -404,7 +404,8 @@ namespace esphome {
 
       } else if (iv[3] > 0x62 && iv[3] < 0x68 && (iv[4] & 0xf0) != 0) {
         // IDIS DLMS standard - https://www.idis-association.com/
-        ESP_LOGI(TAG, "SML Data IDIS");
+        ESP_LOGI(TAG, "SML Data IDIS DLMS standard");
+
         sprintf(manufacturer_id_string, "%c%c%c", iv[0], iv[1], iv[2]);
         serial_number = (iv[4] & 0xf) << 24 | iv[5] << 16 | iv[6] << 8 | iv[7];
 
@@ -463,13 +464,12 @@ namespace esphome {
         ESP_LOGI(TAG, "SML Data function type: %s", function_type.c_str());
       } else {
         // DLMS IEC 62056 standard - https://dlms.com
-        ESP_LOGI(TAG, "SML Data DLMS");
+        ESP_LOGI(TAG, "SML Data DLMS standard");
         sprintf(manufacturer_id_string, "%c%c%c", iv[0], iv[1], iv[2]);
 
         serial_number = iv[5] << 16 | iv[6] << 8 | iv[7];
       }
 
-      ESP_LOGI(TAG, "SML Data manufacturertest: %s", manufacturer_id_string);
       auto manufacturer_lookup = MANUFACTURERS.find(manufacturer_id_string);
 
       if (manufacturer_lookup != MANUFACTURERS.end()) {
