@@ -309,8 +309,8 @@ namespace esphome {
           function_type.append("Multi Utility");
         }*/
 
-        this->s_function_type_->publish_state(function_type);
-        ESP_LOGI(TAG, "SML Data function type: %s", function_type.c_str());
+        this->s_function_type_->publish_state("test");
+        ESP_LOGI(TAG, "SML Data function type: %s", "test");
       }
 
       // Mapping
