@@ -279,12 +279,11 @@ namespace esphome {
         ESP_LOGI(TAG, "SML Data device type: %s", device_type.c_str());
       }
 
-      //ToDo fix function type, not working again, guess is again conversion issue...
       if (this->s_function_type_ != nullptr) {
         //only for idis
         std::string function_type = "";
 
-        uint8_t function_type_int = iv[3] >> 4;
+        uint8_t function_type_int = iv[4] >> 4;
         bool function_type_add = false;
 
         if ((function_type_int & 0x1) != 0) {
