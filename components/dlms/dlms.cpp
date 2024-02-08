@@ -398,6 +398,8 @@ namespace esphome {
         manufacturer_uni_tmp_int = (uint16_t) (manufacturer_uni_tmp_int >> 5);
         manufacturer_id_string[0] = (char) ((manufacturer_uni_tmp_int & 0x1f) + 0x40);
 
+        manufacturer_id_string[3] = 0x00;
+
         // ToDo implement serial number for uni https://github.com/Gurux/Gurux.DLMS.Net/blob/master/Development/Internal/GXCommon.cs#L195
         // toHexString(new byte[] { iv[7], iv[6], iv[5], iv[4], iv[3], iv[2])
 
