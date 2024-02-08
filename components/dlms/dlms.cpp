@@ -458,13 +458,13 @@ namespace esphome {
 
         this->s_function_type_->publish_state(function_type.c_str());
         ESP_LOGI(TAG, "SML Data function type: %s", function_type.c_str());
-      } else {
+      } /*else {
         // DLMS
         ESP_LOGI(TAG, "SML Data DLMS");
         sprintf(manufacturer_id_string, "%c%c%c", iv[0], iv[1], iv[2]);
 
         serial_number = iv[5] << 16 | iv[6] << 8 | iv[7];
-      }
+      }*/
 
       auto manufacturer_lookup = MANUFACTURERS.find(manufacturer_id_string);
 
