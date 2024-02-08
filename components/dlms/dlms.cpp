@@ -468,7 +468,7 @@ namespace esphome {
       auto manufacturer_lookup = MANUFACTURERS.find(manufacturer_id_string);
 
       if (manufacturer_lookup != MANUFACTURERS.end()) {
-        ESP_LOGI(TAG, "SML Data manufacturer: %s", manufacturer_lookup->second.c_str());
+        ESP_LOGI(TAG, "SML Data manufacturer map: %s", manufacturer_lookup->second.c_str());
 
         if (this->s_manufacturer_ != nullptr) {
           this->s_manufacturer_->publish_state(manufacturer_lookup->second.c_str());
