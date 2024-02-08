@@ -376,7 +376,7 @@ namespace esphome {
       }
     }
 
-    void Dlms::read_system_title(uint8_t *iv) {
+    void Dlms::read_system_title(uint8_t &iv) {
       char manufacturer_id_string [3];
       char serial_number_string [16];
       uint32_t serial_number;
