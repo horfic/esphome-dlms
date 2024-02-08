@@ -275,7 +275,7 @@ namespace esphome {
             break;
         }
 
-        this->s_device_type_->publish_state(device_type);
+        this->s_device_type_->publish_state(device_type.c_str());
         ESP_LOGI(TAG, "SML Data device type: %s", device_type.c_str());
       }
 
@@ -309,8 +309,8 @@ namespace esphome {
           function_type.append("Multi Utility");
         }*/
 
-        this->s_function_type_->publish_state("test");
-        ESP_LOGI(TAG, "SML Data function type: %s", "test");
+        this->s_function_type_->publish_state(function_type.c_str());
+        ESP_LOGI(TAG, "SML Data function type: %s", function_type.c_str());
       }
 
       // Mapping
