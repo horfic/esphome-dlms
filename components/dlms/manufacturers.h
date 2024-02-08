@@ -6,7 +6,7 @@
 namespace esphome {
   namespace dlms {
     const std::map <std::string, std::string> MANUFACTURERS {
-      {"AAA", "Aventies GmbH"},
+      /*{"AAA", "Aventies GmbH"},
       {"AAB", "Milas"},
       {"ABB", "ABB AB"},
       {"ABC", "Paya Energy"},
@@ -783,9 +783,9 @@ namespace esphome {
       {"LGG", "Ningxia LGG Instrument Co., LTD"},
       {"LGI", "Landis+Gyr Ltd."},
       {"LGS", "Landis+Gyr (Pty) Ltd."},
-      {"LGU", "LG Uplus Corp."},
+      {"LGU", "LG Uplus Corp."},*/
       {"LGZ", "Landis+Gyr AG"},
-      {"LHA", "Atlantic Meters"},
+      /*{"LHA", "Atlantic Meters"},
       {"LIN", "Ever Meter Co., Ltd"},
       {"LIT", "Punos Electronic AB"},
       {"LJP", "Lars Jansen Productions"},
@@ -1431,7 +1431,7 @@ namespace esphome {
       {"ZXY", "Linyi City Xiaoyuan Water Meter Co., Ltd."},
       {"ZYB", "WEIHAI ZHENYU INTELL & TECH Co. Ltd."},
       {"ZYS", "Wuxi Zhongyi Smart Technology CO,. LTD"},
-      {"ZZZ", "Michael Rac GmbH"},
+      {"ZZZ", "Michael Rac GmbH"},*/
     };
   }
 }
