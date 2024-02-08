@@ -381,8 +381,6 @@ namespace esphome {
       char serial_number_string [17];
       uint32_t serial_number;
 
-      ESP_LOGI(TAG, "SML Data manufacturer iv: '%s'", format_hex_pretty(&iv[0], 12).c_str());
-
       if(isalpha(iv[0]) == 0 || isalpha(iv[1]) == 0 || isalpha(iv[2]) == 0) {
         // UNI/TS 11291-11-2 (Italy) standard - https://uni.com
         ESP_LOGI(TAG, "SML Data UNI DLMS standard");
