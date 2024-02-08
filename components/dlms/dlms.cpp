@@ -222,95 +222,7 @@ namespace esphome {
       ESP_LOGD(TAG, "Crypt data: %s", format_hex_pretty(&apdu[17], this->apdu_length_ - 17).c_str());
       ESP_LOGD(TAG, "Decrypted data: %s", format_hex_pretty(sml_data, sizeof(sml_data)).c_str());
 
-
-      char manufacturer_string [3];
-      sprintf(manufacturer_string, "%c%c%c", iv[0], iv[1], iv[2]);
-      auto manufacturer_lookup = MANUFACTURERS.find(manufacturer_string);
-
-      if (manufacturer_lookup != MANUFACTURERS.end()) {
-        ESP_LOGI(TAG, "SML Data manufacturer: %s", manufacturer_lookup->second.c_str());
-
-        if (this->s_manufacturer_ != nullptr) {
-          this->s_manufacturer_->publish_state(manufacturer_lookup->second.c_str());
-        }
-      } else {
-        ESP_LOGI(TAG, "SML Data manufacturer: %s", manufacturer_string);
-
-        if (this->s_manufacturer_ != nullptr) {
-          this->s_manufacturer_->publish_state(manufacturer_string);
-        }
-      }
-
-      // if idis check can be found here: https://github.com/Gurux/Gurux.DLMS.Net/blob/master/Development/Internal/GXCommon.cs#L3254
-      if (this->s_serial_number_ != nullptr) {
-        //only for idis
-        uint32_t serial_number;
-        serial_number = (iv[4] & 0xf) << 24 | iv[5] << 16 | iv[6] << 8 | iv[7];
-        ESP_LOGI(TAG, "SML Data serial numbers: %i", (size_t) serial_number);
-
-        char serial_number_string [16];
-        sprintf(serial_number_string, "%i", (size_t) serial_number);
-        this->s_serial_number_->publish_state(serial_number_string);
-      }
-
-      if (this->s_device_type_ != nullptr) {
-        //only for idis
-        std::string device_type = "unknown";
-
-        switch (iv[3]) {
-          case 0x63:
-            device_type = "DC";
-            break;
-          case 0x64:
-            device_type = "IDIS package1 PLC single phase meter";
-            break;
-          case 0x65:
-            device_type = "IDIS package1 PLC polyphase phase meter";
-            break;
-          case 0x66:
-            device_type = "IDIS package2 IP single phase meter";
-            break;
-          case 0x67:
-            device_type = "IDIS package2 IP polyphase meter";
-            break;
-        }
-
-        this->s_device_type_->publish_state(device_type.c_str());
-        ESP_LOGI(TAG, "SML Data device type: %s", device_type.c_str());
-      }
-
-      if (this->s_function_type_ != nullptr && iv[3] > 0x62 && iv[3] < 0x68 && (iv[4] & 0xf0) != 0) {
-        //only for idis
-        std::string function_type = "";
-
-        uint8_t function_type_int = iv[4] >> 4;
-        bool function_type_add = false;
-
-        if ((function_type_int & 0x1) != 0) {
-          function_type.append("Disconnector");
-          function_type_add = true;
-        }
-
-        if ((function_type_int & 0x2) != 0) {
-          if (function_type_add) {
-            function_type.append(", ");
-          }
-
-          function_type.append("Load Management");
-          function_type_add = true;
-        }
-
-        if ((function_type_int & 0x4) != 0) {
-          if (function_type_add) {
-            function_type.append(", ");
-          }
-
-          function_type.append("Multi Utility");
-        }
-
-        this->s_function_type_->publish_state(function_type.c_str());
-        ESP_LOGI(TAG, "SML Data function type: %s", function_type.c_str());
-      }
+      this->read_system_title(&iv[0]);
 
       // Mapping
       uint16_t Year;
@@ -462,6 +374,114 @@ namespace esphome {
       if (this->s_negative_reactive_instant_power_total_ != nullptr) {
         this->s_negative_reactive_instant_power_total_->publish_state((size_t) negative_reactive_instant_power_total / 1000.00);
       }
+    }
+
+    void Dlms::read_system_title(uint8_t *iv) {
+      char manufacturer_id_string [3];
+      char serial_number_string [16];
+      uint32_t serial_number;
+
+      if(isalpha(iv[0]) == 0 || isalpha(iv[1]) == 0 || isalpha(iv[2]) == 0) {
+        //UNI
+        uint16_t manufacturer_uni_int = (uint16_t) (st[0] << 8 | st[1]);
+
+        uint16_t manufacturer_uni_tmp_int = (uint16_t) (manufacturer_uni_int >> 8 | manufacturer_uni_int << 8);
+        manufacturer_id_string[2] = (char) ((manufacturer_uni_tmp_int & 0x1f) + 0x40);
+
+        manufacturer_uni_tmp_int = (uint16_t) (manufacturer_uni_tmp_int >> 5);
+        manufacturer_id_string[1] = (char) ((manufacturer_uni_tmp_int & 0x1f) + 0x40);
+
+        manufacturer_uni_tmp_int = (uint16_t) (manufacturer_uni_tmp_int >> 5);
+        manufacturer_id_string[0] = (char) ((manufacturer_uni_tmp_int & 0x1f) + 0x40);
+
+        //ToDo implement serial number for uni https://github.com/Gurux/Gurux.DLMS.Net/blob/master/Development/Internal/GXCommon.cs#L195
+        //toHexString(new byte[] { st[7], st[6], st[5], st[4], st[3], st[2])
+
+      } else if (iv[3] > 0x62 && iv[3] < 0x68 && (iv[4] & 0xf0) != 0) {
+        //IDIS
+        sprintf(manufacturer_id_string, "%c%c%c", iv[0], iv[1], iv[2]);
+        serial_number = (iv[4] & 0xf) << 24 | iv[5] << 16 | iv[6] << 8 | iv[7];
+
+        std::string device_type = "unknown";
+
+        switch (iv[3]) {
+          case 0x63:
+            device_type = "DC";
+            break;
+          case 0x64:
+            device_type = "IDIS package1 PLC single phase meter";
+            break;
+          case 0x65:
+            device_type = "IDIS package1 PLC polyphase phase meter";
+            break;
+          case 0x66:
+            device_type = "IDIS package2 IP single phase meter";
+            break;
+          case 0x67:
+            device_type = "IDIS package2 IP polyphase meter";
+            break;
+        }
+
+        this->s_device_type_->publish_state(device_type.c_str());
+        ESP_LOGI(TAG, "SML Data device type: %s", device_type.c_str());
+
+
+        std::string function_type = "";
+
+        uint8_t function_type_int = iv[4] >> 4;
+        bool function_type_add = false;
+
+        if ((function_type_int & 0x1) != 0) {
+          function_type.append("Disconnector");
+          function_type_add = true;
+        }
+
+        if ((function_type_int & 0x2) != 0) {
+          if (function_type_add) {
+            function_type.append(", ");
+          }
+
+          function_type.append("Load Management");
+          function_type_add = true;
+        }
+
+        if ((function_type_int & 0x4) != 0) {
+          if (function_type_add) {
+            function_type.append(", ");
+          }
+
+          function_type.append("Multi Utility");
+        }
+
+        this->s_function_type_->publish_state(function_type.c_str());
+        ESP_LOGI(TAG, "SML Data function type: %s", function_type.c_str());
+      } else {
+        //DLMS
+        sprintf(manufacturer_id_string, "%c%c%c", iv[0], iv[1], iv[2]);
+
+        serial_number = iv[5] << 16 | iv[6] << 8 | iv[7];
+      }
+
+      auto manufacturer_lookup = MANUFACTURERS.find(manufacturer_id_string);
+
+      if (manufacturer_lookup != MANUFACTURERS.end()) {
+        ESP_LOGI(TAG, "SML Data manufacturer: %s", manufacturer_lookup->second.c_str());
+
+        if (this->s_manufacturer_ != nullptr) {
+          this->s_manufacturer_->publish_state(manufacturer_lookup->second.c_str());
+        }
+      } else {
+        ESP_LOGI(TAG, "SML Data manufacturer: %s", manufacturer_id_string);
+
+        if (this->s_manufacturer_ != nullptr) {
+          this->s_manufacturer_->publish_state(manufacturer_id_string);
+        }
+      }
+
+      ESP_LOGI(TAG, "SML Data serial numbers: %i", (size_t) serial_number);
+
+      sprintf(serial_number_string, "%i", (size_t) serial_number);
+      this->s_serial_number_->publish_state(serial_number_string);
     }
 
     bool Dlms::crc16_check(uint8_t *data, size_t data_size) {
