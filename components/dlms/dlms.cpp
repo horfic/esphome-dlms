@@ -398,7 +398,8 @@ namespace esphome {
         // ToDo implement serial number for uni https://github.com/Gurux/Gurux.DLMS.Net/blob/master/Development/Internal/GXCommon.cs#L195
         // toHexString(new byte[] { iv[7], iv[6], iv[5], iv[4], iv[3], iv[2])
 
-      } else */if (iv[3] > 0x62 && iv[3] < 0x68 && (iv[4] & 0xf0) != 0) {
+      } else if (iv[3] > 0x62 && iv[3] < 0x68 && (iv[4] & 0xf0) != 0) {*/
+      if (true) {
         // IDIS
         ESP_LOGI(TAG, "SML Data IDIS");
         sprintf(manufacturer_id_string, "%c%c%c", iv[0], iv[1], iv[2]);
