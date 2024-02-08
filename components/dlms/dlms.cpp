@@ -222,7 +222,7 @@ namespace esphome {
       ESP_LOGD(TAG, "Crypt data: %s", format_hex_pretty(&apdu[17], this->apdu_length_ - 17).c_str());
       ESP_LOGD(TAG, "Decrypted data: %s", format_hex_pretty(sml_data, sizeof(sml_data)).c_str());
 
-      this->read_system_title(&iv[0]);
+      this->read_system_title(&iv);
 
       // Mapping
       uint16_t Year;
@@ -382,7 +382,7 @@ namespace esphome {
       uint32_t serial_number;
 
       if(isalpha(iv[0]) == 0 || isalpha(iv[1]) == 0 || isalpha(iv[2]) == 0) {
-        //UNI
+        // UNI
         uint16_t manufacturer_uni_int = (uint16_t) (iv[0] << 8 | iv[1]);
 
         uint16_t manufacturer_uni_tmp_int = (uint16_t) (manufacturer_uni_int >> 8 | manufacturer_uni_int << 8);
@@ -394,11 +394,11 @@ namespace esphome {
         manufacturer_uni_tmp_int = (uint16_t) (manufacturer_uni_tmp_int >> 5);
         manufacturer_id_string[0] = (char) ((manufacturer_uni_tmp_int & 0x1f) + 0x40);
 
-        //ToDo implement serial number for uni https://github.com/Gurux/Gurux.DLMS.Net/blob/master/Development/Internal/GXCommon.cs#L195
-        //toHexString(new byte[] { iv[7], iv[6], iv[5], iv[4], iv[3], iv[2])
+        // ToDo implement serial number for uni https://github.com/Gurux/Gurux.DLMS.Net/blob/master/Development/Internal/GXCommon.cs#L195
+        // toHexString(new byte[] { iv[7], iv[6], iv[5], iv[4], iv[3], iv[2])
 
       } else if (iv[3] > 0x62 && iv[3] < 0x68 && (iv[4] & 0xf0) != 0) {
-        //IDIS
+        // IDIS
         sprintf(manufacturer_id_string, "%c%c%c", iv[0], iv[1], iv[2]);
         serial_number = (iv[4] & 0xf) << 24 | iv[5] << 16 | iv[6] << 8 | iv[7];
 
@@ -456,7 +456,7 @@ namespace esphome {
         this->s_function_type_->publish_state(function_type.c_str());
         ESP_LOGI(TAG, "SML Data function type: %s", function_type.c_str());
       } else {
-        //DLMS
+        // DLMS
         sprintf(manufacturer_id_string, "%c%c%c", iv[0], iv[1], iv[2]);
 
         serial_number = iv[5] << 16 | iv[6] << 8 | iv[7];
