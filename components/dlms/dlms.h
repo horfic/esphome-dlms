@@ -47,7 +47,7 @@ namespace esphome {
         protected:
           void reset_apdu();
           void reset_frame();
-          void read_system_title(uint8_t *iv)
+          void read_system_title(uint8_t *iv);
           void decrypt_dlms_data(uint8_t *dlms_data);
           bool crc16_check(uint8_t *data, size_t size);
 

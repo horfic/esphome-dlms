@@ -383,7 +383,7 @@ namespace esphome {
 
       if(isalpha(iv[0]) == 0 || isalpha(iv[1]) == 0 || isalpha(iv[2]) == 0) {
         //UNI
-        uint16_t manufacturer_uni_int = (uint16_t) (st[0] << 8 | st[1]);
+        uint16_t manufacturer_uni_int = (uint16_t) (iv[0] << 8 | iv[1]);
 
         uint16_t manufacturer_uni_tmp_int = (uint16_t) (manufacturer_uni_int >> 8 | manufacturer_uni_int << 8);
         manufacturer_id_string[2] = (char) ((manufacturer_uni_tmp_int & 0x1f) + 0x40);
@@ -395,7 +395,7 @@ namespace esphome {
         manufacturer_id_string[0] = (char) ((manufacturer_uni_tmp_int & 0x1f) + 0x40);
 
         //ToDo implement serial number for uni https://github.com/Gurux/Gurux.DLMS.Net/blob/master/Development/Internal/GXCommon.cs#L195
-        //toHexString(new byte[] { st[7], st[6], st[5], st[4], st[3], st[2])
+        //toHexString(new byte[] { iv[7], iv[6], iv[5], iv[4], iv[3], iv[2])
 
       } else if (iv[3] > 0x62 && iv[3] < 0x68 && (iv[4] & 0xf0) != 0) {
         //IDIS
