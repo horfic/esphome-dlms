@@ -222,7 +222,7 @@ namespace esphome {
       ESP_LOGD(TAG, "Crypt data: %s", format_hex_pretty(&apdu[17], this->apdu_length_ - 17).c_str());
       ESP_LOGD(TAG, "Decrypted data: %s", format_hex_pretty(sml_data, sizeof(sml_data)).c_str());
 
-      this->read_system_title(iv);
+      this->read_system_title(&iv[0]);
 
       // Mapping
       uint16_t Year;
@@ -376,12 +376,12 @@ namespace esphome {
       }
     }
 
-    void Dlms::read_system_title(uint8_t iv[12]) {
+    void Dlms::read_system_title(uint8_t *iv) {
       char manufacturer_id_string [3];
       char serial_number_string [16];
       uint32_t serial_number;
 
-      ESP_LOGI(TAG, "SML Data manufacturertest: '%s'", manufacturer_id_string);
+      ESP_LOGI(TAG, "SML Data manufacturer iv: '%s'", format_hex_pretty(&iv[0], 12).c_str());
 
       if(isalpha(iv[0]) == 0 || isalpha(iv[1]) == 0 || isalpha(iv[2]) == 0) {
         // UNI
