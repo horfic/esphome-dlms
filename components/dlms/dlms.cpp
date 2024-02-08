@@ -376,7 +376,6 @@ namespace esphome {
       }
     }
 
-    // ToDo - fix iv parameter, everything works inside the decrypt function but not inside here...
     void Dlms::read_system_title(uint8_t *iv) {
       char manufacturer_id_string [4];
       char serial_number_string [17];
