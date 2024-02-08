@@ -279,7 +279,7 @@ namespace esphome {
         ESP_LOGI(TAG, "SML Data device type: %s", device_type.c_str());
       }
 
-      if (this->s_function_type_ != nullptr) {
+      if (this->s_function_type_ != nullptr && iv[3] > 0x62 && iv[3] < 0x68 && (iv[4] & 0xf0) != 0) {
         //only for idis
         std::string function_type = "";
 
