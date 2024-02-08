@@ -284,7 +284,7 @@ namespace esphome {
         //only for idis
         std::string function_type = "";
 
-        size_t function_type_int = iv[3] >> 4;
+        uint8_t function_type_int = iv[3] >> 4;
         bool function_type_add = false;
 
         if ((function_type_int & 0x1) != 0) {
