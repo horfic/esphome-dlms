@@ -381,7 +381,7 @@ namespace esphome {
       char serial_number_string [16];
       uint32_t serial_number;
 
-      if(isalpha(iv[0]) == 0 || isalpha(iv[1]) == 0 || isalpha(iv[2]) == 0) {
+      /*if(isalpha(iv[0]) == 0 || isalpha(iv[1]) == 0 || isalpha(iv[2]) == 0) {
         // UNI
         uint16_t manufacturer_uni_int = (uint16_t) (iv[0] << 8 | iv[1]);
 
@@ -397,7 +397,7 @@ namespace esphome {
         // ToDo implement serial number for uni https://github.com/Gurux/Gurux.DLMS.Net/blob/master/Development/Internal/GXCommon.cs#L195
         // toHexString(new byte[] { iv[7], iv[6], iv[5], iv[4], iv[3], iv[2])
 
-      } else if (iv[3] > 0x62 && iv[3] < 0x68 && (iv[4] & 0xf0) != 0) {
+      } else if (iv[3] > 0x62 && iv[3] < 0x68 && (iv[4] & 0xf0) != 0) {*/
         // IDIS
         sprintf(manufacturer_id_string, "%c%c%c", iv[0], iv[1], iv[2]);
         serial_number = (iv[4] & 0xf) << 24 | iv[5] << 16 | iv[6] << 8 | iv[7];
@@ -455,12 +455,12 @@ namespace esphome {
 
         this->s_function_type_->publish_state(function_type.c_str());
         ESP_LOGI(TAG, "SML Data function type: %s", function_type.c_str());
-      } else {
+      /*} else {
         // DLMS
         sprintf(manufacturer_id_string, "%c%c%c", iv[0], iv[1], iv[2]);
 
         serial_number = iv[5] << 16 | iv[6] << 8 | iv[7];
-      }
+      }*/
 
       auto manufacturer_lookup = MANUFACTURERS.find(manufacturer_id_string);
 
