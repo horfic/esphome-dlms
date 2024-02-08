@@ -253,7 +253,7 @@ namespace esphome {
         this->s_serial_number_->publish_state(serial_number_string);
       }
 
-      /*if (this->s_device_type_ != nullptr) {
+      if (this->s_device_type_ != nullptr) {
         //only for idis
         std::string device_type = "unknown";
 
@@ -277,14 +277,14 @@ namespace esphome {
 
         this->s_device_type_->publish_state(device_type.c_str());
         ESP_LOGI(TAG, "SML Data device type: %s", device_type.c_str());
-      }*/
+      }
 
       //ToDo fix function type, not working again, guess is again conversion issue...
       if (this->s_function_type_ != nullptr) {
         //only for idis
-        std::string function_type = "test";
+        std::string function_type = "";
 
-        /*size_t function_type_int = iv[3] >> 4;
+        size_t function_type_int = iv[3] >> 4;
         bool function_type_add = false;
 
         if ((function_type_int & 0x1) != 0) {
@@ -307,7 +307,7 @@ namespace esphome {
           }
 
           function_type.append("Multi Utility");
-        }*/
+        }
 
         this->s_function_type_->publish_state(function_type.c_str());
         ESP_LOGI(TAG, "SML Data function type: %s", function_type.c_str());
