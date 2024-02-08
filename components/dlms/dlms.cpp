@@ -381,7 +381,7 @@ namespace esphome {
       char serial_number_string [16];
       uint32_t serial_number;
 
-      ESP_LOGI(TAG, "SML Data manufacturer: %s", manufacturer_id_string);
+      ESP_LOGI(TAG, "SML Data manufacturertest: '%s'", manufacturer_id_string);
 
       if(isalpha(iv[0]) == 0 || isalpha(iv[1]) == 0 || isalpha(iv[2]) == 0) {
         // UNI
@@ -467,7 +467,7 @@ namespace esphome {
         serial_number = iv[5] << 16 | iv[6] << 8 | iv[7];
       }
 
-      ESP_LOGI(TAG, "SML Data manufacturer: %s", manufacturer_id_string);
+      ESP_LOGI(TAG, "SML Data manufacturertest: %s", manufacturer_id_string);
       auto manufacturer_lookup = MANUFACTURERS.find(manufacturer_id_string);
 
       if (manufacturer_lookup != MANUFACTURERS.end()) {
