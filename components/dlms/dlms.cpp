@@ -222,7 +222,7 @@ namespace esphome {
       ESP_LOGD(TAG, "Crypt data: %s", format_hex_pretty(&apdu[17], this->apdu_length_ - 17).c_str());
       ESP_LOGD(TAG, "Decrypted data: %s", format_hex_pretty(sml_data, sizeof(sml_data)).c_str());
 
-      //this->read_system_title(iv);
+      this->read_system_title(&iv);
 
       // Mapping
       uint16_t Year;
@@ -384,10 +384,10 @@ namespace esphome {
 
       ESP_LOGI(TAG, "SML Data manufacturer iv: '%s'", format_hex_pretty(&iv[0], 12).c_str());
 
-      if(isalpha(iv[0]) == 0 || isalpha(iv[1]) == 0 || isalpha(iv[2]) == 0) {
-        // UNI
+      if(isalpha(*iv[0]) == 0 || isalpha(*iv[1]) == 0 || isalpha(*iv[2]) == 0) {
+        // UNI/TS 11291-11-2 (Italy) standard - https://uni.com
         ESP_LOGI(TAG, "SML Data UNI");
-        uint16_t manufacturer_uni_int = (uint16_t) (iv[0] << 8 | iv[1]);
+        uint16_t manufacturer_uni_int = (uint16_t) (*iv[0] << 8 | *iv[1]);
 
         uint16_t manufacturer_uni_tmp_int = (uint16_t) (manufacturer_uni_int >> 8 | manufacturer_uni_int << 8);
         manufacturer_id_string[2] = (char) ((manufacturer_uni_tmp_int & 0x1f) + 0x40);
@@ -399,17 +399,17 @@ namespace esphome {
         manufacturer_id_string[0] = (char) ((manufacturer_uni_tmp_int & 0x1f) + 0x40);
 
         // ToDo implement serial number for uni https://github.com/Gurux/Gurux.DLMS.Net/blob/master/Development/Internal/GXCommon.cs#L195
-        // toHexString(new byte[] { iv[7], iv[6], iv[5], iv[4], iv[3], iv[2])
+        // toHexString(new byte[] { *iv[7], *iv[6], *iv[5], *iv[4], *iv[3], *iv[2])
 
-      } else if (iv[3] > 0x62 && iv[3] < 0x68 && (iv[4] & 0xf0) != 0) {
-        // IDIS
+      } else if (*iv[3] > 0x62 && *iv[3] < 0x68 && (*iv[4] & 0xf0) != 0) {
+        // IDIS DLMS standard - https://www.idis-association.com/
         ESP_LOGI(TAG, "SML Data IDIS");
-        sprintf(manufacturer_id_string, "%c%c%c", iv[0], iv[1], iv[2]);
-        serial_number = (iv[4] & 0xf) << 24 | iv[5] << 16 | iv[6] << 8 | iv[7];
+        sprintf(manufacturer_id_string, "%c%c%c", *iv[0], *iv[1], *iv[2]);
+        serial_number = (*iv[4] & 0xf) << 24 | *iv[5] << 16 | *iv[6] << 8 | *iv[7];
 
         std::string device_type = "unknown";
 
-        switch (iv[3]) {
+        switch (*iv[3]) {
           case 0x63:
             device_type = "DC";
             break;
@@ -433,7 +433,7 @@ namespace esphome {
 
         std::string function_type = "";
 
-        uint8_t function_type_int = iv[4] >> 4;
+        uint8_t function_type_int = *iv[4] >> 4;
         bool function_type_add = false;
 
         if ((function_type_int & 0x1) != 0) {
@@ -461,11 +461,11 @@ namespace esphome {
         this->s_function_type_->publish_state(function_type.c_str());
         ESP_LOGI(TAG, "SML Data function type: %s", function_type.c_str());
       } else {
-        // DLMS
+        // DLMS IEC 62056 standard - https://dlms.com
         ESP_LOGI(TAG, "SML Data DLMS");
-        sprintf(manufacturer_id_string, "%c%c%c", iv[0], iv[1], iv[2]);
+        sprintf(manufacturer_id_string, "%c%c%c", *iv[0], *iv[1], *iv[2]);
 
-        serial_number = iv[5] << 16 | iv[6] << 8 | iv[7];
+        serial_number = *iv[5] << 16 | *iv[6] << 8 | *iv[7];
       }
 
       ESP_LOGI(TAG, "SML Data manufacturertest: %s", manufacturer_id_string);
