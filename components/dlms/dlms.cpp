@@ -222,7 +222,7 @@ namespace esphome {
       ESP_LOGD(TAG, "Crypt data: %s", format_hex_pretty(&apdu[17], this->apdu_length_ - 17).c_str());
       ESP_LOGD(TAG, "Decrypted data: %s", format_hex_pretty(sml_data, sizeof(sml_data)).c_str());
 
-      this->read_system_title(&iv);
+      this->read_system_title(&iv[0]);
 
       // Mapping
       uint16_t Year;
