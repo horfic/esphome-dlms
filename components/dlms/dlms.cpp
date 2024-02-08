@@ -253,7 +253,7 @@ namespace esphome {
         this->s_serial_number_->publish_state(serial_number_string);
       }
 
-      if (this->s_device_type_ != nullptr) {
+      /*if (this->s_device_type_ != nullptr) {
         //only for idis
         std::string device_type = "unknown";
 
@@ -277,7 +277,7 @@ namespace esphome {
 
         this->s_device_type_->publish_state(device_type.c_str());
         ESP_LOGI(TAG, "SML Data device type: %s", device_type.c_str());
-      }
+      }*/
 
       //ToDo fix function type, not working again, guess is again conversion issue...
       if (this->s_function_type_ != nullptr) {
