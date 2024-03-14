@@ -161,6 +161,9 @@ namespace esphome {
 
       delete[] this->apdu_buffer_;
       this->apdu_buffer_ = new uint8_t[2030];
+
+      //memset(&this->apdu_buffer_, 0, sizeof(this->apdu_buffer_));
+      //uint8_t this->apdu_buffer_[2030];
     }
 
     void Dlms::reset_frame() {
@@ -195,7 +198,7 @@ namespace esphome {
 
       //Only enable auth when auth key is set, possible check also with security byte is 0x30, 0x50 and 0x70 to force enable it and throw an error?
       if (!this->auth_key_.empty()) {
-        uint8_t *auth_key = new uint8_t[17];
+        uint8_t auth_key[17];
         memcpy(&auth_key[0], &apdu[12], 1);
         memcpy(&auth_key[1], &this->auth_key_[0], 16);
 
